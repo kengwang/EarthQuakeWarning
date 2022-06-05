@@ -7,8 +7,8 @@ namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 
 public class CurrentPosition : INotificationOption
 {
-    private double _latitude;
-    private double _longitude;
+    private double _latitude = 30.539772;
+    private double _longitude = 104.075426;
 
     public double Latitude
     {

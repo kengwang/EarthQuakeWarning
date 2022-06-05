@@ -15,7 +15,7 @@ public partial class EarthQuakeDetail : Page
         var url = $"https://uri.amap.com/marker?markers={info.Longitude},{info.Latitude},震中：{info.Position}";
         if (currentPosition != null)
         {
-            url += $"|{currentPosition.Longitude},{currentPosition.Latitude}|我的位置";
+            url += $"|{currentPosition.Longitude},{currentPosition.Latitude},我的位置";
         }
 
         MapView.Source = new Uri(url);

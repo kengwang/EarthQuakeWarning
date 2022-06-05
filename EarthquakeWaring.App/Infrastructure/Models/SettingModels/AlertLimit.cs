@@ -7,8 +7,8 @@ namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 
 public class AlertLimit : INotificationOption
 {
-    private double _magnitude;
-    private double _intensity;
+    private double _magnitude = 3.0;
+    private double _intensity = 2.0;
 
     public double Magnitude
     {

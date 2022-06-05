@@ -8,6 +8,7 @@
     xmlns:local="clr-namespace:EarthquakeWaring.App.Windows"
     WindowStartupLocation="CenterScreen"
     Topmost="True"
+    Closed="EarlyWarningWindow_OnClosed"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="地震预警"
     Width="360"
@@ -23,8 +24,9 @@
         <extensions:IntensityDescriptor x:Key="IntensityDescriptor" />
         <extensions:CountDownHumanizer x:Key="CountDownHumanizer" />
         <extensions:DateTimeHumanizer x:Key="DateTimeHumanizer" />
+        <extensions:DistanceHumanizer x:Key="DistanceHumanizer" />
     </Window.Resources>
-    <Grid Background="{Binding Stage, Mode=OneWay, Converter={StaticResource StageToColor}}">
+    <Grid MouseDown="ShowDetail" Background="{Binding Stage, Mode=OneWay, Converter={StaticResource StageToColor}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="22" />
             <!--  TextTip  -->
@@ -142,13 +144,17 @@
         <Grid Grid.Row="8">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TextBlock
                 TextAlignment="Center"
                 Grid.Row="0" FontSize="18" Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                 Text="{Binding Intensity,Converter={StaticResource IntensityDescriptor}}" />
-            <TextBlock Grid.Row="1"
+            <TextBlock Grid.Row="1" TextAlignment="Center" FontSize="18"
+                       Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                       Text="{Binding Distance,Converter={StaticResource DistanceHumanizer}}" />
+            <TextBlock Grid.Row="2"
                        FontSize="15"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
                        Text="中国地震预警网 大陆地震预警中心&#x0a;成都市应急管理局"

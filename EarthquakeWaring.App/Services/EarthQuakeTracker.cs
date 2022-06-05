@@ -21,6 +21,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
     private readonly ISetting<CurrentPosition> _currentPosition;
     private readonly ISetting<AlertLimit> _alertLimit;
     private readonly ILogger<EarthQuakeTracker> _logger;
+    private readonly IServiceProvider _service;
 
     private EarlyWarningWindow? _warningWindow;
     private EarthQuakeTrackingInformation _trackingInformation = new();
@@ -29,13 +30,15 @@ public class EarthQuakeTracker : IEarthQuakeTracker
     private CancellationToken _cancellationToken;
 
     public EarthQuakeTracker(IEarthQuakeApi earthQuakeApi, IEarthQuakeCalculator earthQuakeCalculator,
-        ISetting<CurrentPosition> currentPosition, ILogger<EarthQuakeTracker> logger, ISetting<AlertLimit> alertLimit)
+        ISetting<CurrentPosition> currentPosition, ILogger<EarthQuakeTracker> logger, ISetting<AlertLimit> alertLimit,
+        IServiceProvider service)
     {
         _earthQuakeApi = earthQuakeApi;
         _earthQuakeCalculator = earthQuakeCalculator;
         _currentPosition = currentPosition;
         _logger = logger;
         _alertLimit = alertLimit;
+        _service = service;
     }
 
     public TimeSpan SimulateTimeSpan { get; set; } = TimeSpan.Zero;
@@ -100,11 +103,12 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                 _trackingInformation.CountDown = (int)(_trackingInformation.TheoryCountDown -
                                                        (DateTime.Now - SimulateTimeSpan -
                                                         _trackingInformation.StartTime).TotalSeconds);
-                _trackingInformation.Stage = GetEarthQuakeAlertStage();
+                _trackingInformation.Stage = GetEarthQuakeAlertStage(_trackingInformation);
                 if (SimulateTimeSpan == TimeSpan.Zero || _warningWindow != null)
-                    if (_trackingInformation.Stage < EarthQuakeStage.Warning || _warningWindow != null)
+                    if (_alertLimit.Setting == null || ShouldPopupAlert(_trackingInformation, _alertLimit.Setting) ||
+                        _warningWindow != null)
                         return;
-                _warningWindow = new EarlyWarningWindow(_trackingInformation);
+                _warningWindow = new EarlyWarningWindow(_trackingInformation, _service);
                 _warningWindow.Show();
             }
             else
@@ -114,16 +118,20 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         }, DispatcherPriority.Normal, _cancellationToken);
     }
 
-
-    private EarthQuakeStage GetEarthQuakeAlertStage()
+    public static EarthQuakeStage GetEarthQuakeAlertStage(EarthQuakeTrackingInformation information)
     {
-        var w = 0;
-        if (_trackingInformation.Intensity >= _alertLimit.Setting?.Intensity) w += 1;
-        if (_trackingInformation.Magnitude >= _alertLimit.Setting?.Magnitude)
+        return information.Intensity switch
         {
-            w += 1;
-        }
+            >= 5 => EarthQuakeStage.Forced,
+            >= 3 and < 5 => EarthQuakeStage.Emergency,
+            >= 1 => EarthQuakeStage.Warning,
+            < 1 => EarthQuakeStage.Record,
+            _ => EarthQuakeStage.Record
+        };
+    }
 
-        return (EarthQuakeStage)(_trackingInformation.Distance < 100 ? ++w : w);
+    public static bool ShouldPopupAlert(EarthQuakeTrackingInformation information, AlertLimit alertLimit)
+    {
+        return information.Intensity >= alertLimit.Intensity;
     }
 }

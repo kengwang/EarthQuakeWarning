@@ -74,19 +74,7 @@ public partial class EarthQuakesListPage : Page
                 trackingInformation.Distance);
         trackingInformation.Intensity =
             _calculator.GetIntensity(trackingInformation.Magnitude, trackingInformation.Distance);
-        trackingInformation.Stage = GetEarthQuakeAlertStage();
-
-        EarthQuakeStage GetEarthQuakeAlertStage()
-        {
-            var w = 0;
-            if (trackingInformation.Intensity >= _alertLimit.Setting?.Intensity) w += 1;
-            if (trackingInformation.Magnitude >= _alertLimit.Setting?.Magnitude)
-            {
-                w += 1;
-            }
-
-            return (EarthQuakeStage)(trackingInformation.Distance < 100 ? ++w : w);
-        }
+        trackingInformation.Stage = EarthQuakeTracker.GetEarthQuakeAlertStage(trackingInformation);
 
         return trackingInformation;
     }

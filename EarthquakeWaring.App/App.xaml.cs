@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
 using System.Windows;
 using EarthquakeWaring.App.Extensions;
-using EarthquakeWaring.App.Infrastructure;
-using EarthquakeWaring.App.Infrastructure.Models;
 using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Pages;
@@ -22,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
-using Serilog.Events;
 
 namespace EarthquakeWaring.App
 {
@@ -61,7 +51,7 @@ namespace EarthquakeWaring.App
             }
             
             // Check if want GUI
-            if (e.Args.Contains("-nogui"))
+            if (e.Args.Contains("/nogui"))
             {
                 Host.Run();
             }

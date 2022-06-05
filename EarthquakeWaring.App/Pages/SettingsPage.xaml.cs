@@ -29,7 +29,7 @@ public partial class SettingsPage : Page
 
     private void OpenPositionSelector(object sender, RoutedEventArgs e)
     {
-        Process.Start("explorer.exe", "https://lbs.amap.com/tools/picker");
+            Process.Start("explorer.exe", "https://lbs.amap.com/tools/picker");
     }
 
     private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
@@ -44,5 +44,20 @@ public partial class SettingsPage : Page
         if (dontFire) return;
         Registry.CurrentUser.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run")
             .DeleteValue(nameof(EarthquakeWaring));
+    }
+
+    private void DeveloperClicked(object sender, RoutedEventArgs e)
+    {
+        Process.Start("explorer.exe", "https://github.com/kengwang");
+    }
+
+    private void OpenSourceClick(object sender, RoutedEventArgs e)  
+    {
+        Process.Start("explorer.exe", "https://github.com/kengwang/EarthQuakeWarning");
+    }
+
+    private void ThanksClick(object sender, RoutedEventArgs e)
+    {
+        Process.Start("explorer.exe", "http://www.365icl.com/");
     }
 }
