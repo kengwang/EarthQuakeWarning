@@ -36,7 +36,7 @@
                             Fill="{Binding Stage, Converter={StaticResource StageToColor}}"
                             RadiusX="5"
                             RadiusY="5" />
-                        <Grid Grid.Column="1" Margin="5">
+                        <Grid MouseDown="ShowEarthQuakeDetail" Tag="{Binding .}" Grid.Column="1" Margin="5">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />

@@ -89,6 +89,7 @@ namespace EarthquakeWaring.App
             service.AddSingleton<MainWindow>();
             service.AddTransient<SettingsPage>();
             service.AddTransient<EarthQuakesListPage>();
+            service.AddTransient<EarthQuakeDetail>();
             service.AddTransient<SettingsPageViewModel>();
             
 

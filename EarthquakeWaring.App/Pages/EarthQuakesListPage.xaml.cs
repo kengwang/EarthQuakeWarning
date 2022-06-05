@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Navigation;
 using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
@@ -10,6 +11,7 @@ using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Services;
+using EarthquakeWaring.App.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Button = WPFUI.Controls.Button;
@@ -100,5 +102,13 @@ public partial class EarthQuakesListPage : Page
         {
             EventId = info.EventId
         }, cancellationTokenSource);
+    }
+
+    private void ShowEarthQuakeDetail(object sender, MouseButtonEventArgs e)
+    {
+        if (((Grid)sender).Tag is EarthQuakeTrackingInformation info)
+        {
+            _service.GetService<MainWindow>()?.RootFrame.Navigate(new EarthQuakeDetail(info,_currentPosition.Setting));
+        }
     }
 }

@@ -10,13 +10,17 @@ API / 计算数据 自：[成都高新减灾研究所](http://www.365icl.com/) /
 
 理论上会在超过阈值后弹窗。
 
+由于部分常量 （例如 地球半径）与官方 APP 取值稍有出入，可能导致部分数据有偏差，请以官方为准。
+
 请勿完全依赖此软件，推荐使用官方 [地震预警](https://download.chinaeew.cn/mobile) APP
 
 ## 使用
 
-* lepoco/wpfui：[https://github.com/lepoco/wpfui](https://github.com/lepoco/wpfui)
+* lepoco/wpfui: [https://github.com/lepoco/wpfui](https://github.com/lepoco/wpfui)
 * Microsoft.Extensions.DependencyInjection
-* serilog/serilog [https://github.com/serilog/serilog](https://github.com/serilog/serilog)
+* serilog/serilog: [https://github.com/serilog/serilog](https://github.com/serilog/serilog)
+* microsoft/webview2: [https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/](https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/)
+* 高德地图 Uri Api: [https://lbs.amap.com/api/uri-api](https://lbs.amap.com/api/uri-api)
 
 
 
