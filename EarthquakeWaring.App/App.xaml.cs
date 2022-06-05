@@ -22,6 +22,7 @@ namespace EarthquakeWaring.App
     public partial class App : Application
     {
         public readonly IHost Host;
+
         public App()
         {
             var builder = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder();
@@ -33,7 +34,9 @@ namespace EarthquakeWaring.App
         private static void ConfigureLogging(ILoggingBuilder loggingBuilder)
         {
             loggingBuilder.AddSerilog(new LoggerConfiguration()
+#if DEBUG
                 .WriteTo.Console()
+#endif
                 .WriteTo.File("logs/log.log", rollingInterval: RollingInterval.Day)
                 .CreateLogger());
         }
@@ -42,14 +45,14 @@ namespace EarthquakeWaring.App
         {
             base.OnStartup(e);
             DI.Services = Host.Services;
-            
+
             // Kill Other Instance
             foreach (var process in Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName)
                          .Where(t => t.Id != Environment.ProcessId))
             {
                 process.Kill(true);
             }
-            
+
             // Check if want GUI
             if (e.Args.Contains("/nogui"))
             {
@@ -60,7 +63,6 @@ namespace EarthquakeWaring.App
                 Host.RunAsync();
                 Host.Services.GetService<MainWindow>()?.Show();
             }
-            
         }
 
         public static void ConfigureServices(IServiceCollection service)
@@ -68,13 +70,13 @@ namespace EarthquakeWaring.App
             // For Background Services
             service.AddSingleton<IEarthQuakeCalculator, HuaniaEarthQuakeCalculator>();
             service.AddSingleton<IEarthQuakeApi, HuaniaEarthQuakeApi>();
-            service.AddSingleton<IHttpRequester,HttpRequester>();
+            service.AddSingleton<IHttpRequester, HttpRequester>();
             service.AddTransient<IEarthQuakeTracker, EarthQuakeTracker>();
-            service.AddSingleton<INotificationPublisher,NotificationPublisher>();
+            service.AddSingleton<INotificationPublisher, NotificationPublisher>();
             service.AddSingleton<INotificationHandler<HeartBeatNotification>, EarthQuakeInfoUpdater>();
             service.AddSingleton<IJsonConvertService, JsonConvertService>();
-            service.AddSingleton(typeof(ISetting<>),typeof(FileJsonSetting<>));
-            
+            service.AddSingleton(typeof(ISetting<>), typeof(FileJsonSetting<>));
+
             // For UI
             service.AddSingleton<MainWindow>();
             service.AddTransient<SettingsPage>();
@@ -82,7 +84,7 @@ namespace EarthquakeWaring.App
             service.AddTransient<EarthQuakeDetail>();
             service.AddTransient<SettingsPageViewModel>();
             service.AddTransient<EarthQuakeExamplesPage>();
-            
+
 
             service.AddHostedService<HeartBeatBackgroundService>();
         }

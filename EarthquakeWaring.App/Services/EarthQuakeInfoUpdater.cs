@@ -6,6 +6,7 @@ using EarthquakeWaring.App.Infrastructure.Models;
 using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace EarthquakeWaring.App.Services;
 
@@ -13,18 +14,16 @@ public class EarthQuakeInfoUpdater : INotificationHandler<HeartBeatNotification>
 {
     private readonly IEarthQuakeApi _earthQuakeApi;
     private readonly IServiceProvider _serviceProvider;
-
-#if DEBUG
-    private long _lastEarthQuakeId = 1654275714090;
-#else
+    private readonly ILogger<EarthQuakeInfoUpdater> _logger;
     private long _lastEarthQuakeId = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-#endif
     private readonly Dictionary<IEarthQuakeTracker, CancellationTokenSource> _trackers = new();
 
-    public EarthQuakeInfoUpdater(IEarthQuakeApi earthQuakeApi, IServiceProvider serviceProvider)
+    public EarthQuakeInfoUpdater(IEarthQuakeApi earthQuakeApi, IServiceProvider serviceProvider,
+        ILogger<EarthQuakeInfoUpdater> logger)
     {
         _earthQuakeApi = earthQuakeApi;
         _serviceProvider = serviceProvider;
+        _logger = logger;
     }
 
     public async Task Handle(HeartBeatNotification notification, CancellationToken cancellationToken)
@@ -34,6 +33,8 @@ public class EarthQuakeInfoUpdater : INotificationHandler<HeartBeatNotification>
         if (quakeList.Count <= 0) return;
         foreach (var earthQuake in quakeList)
         {
+            _logger.LogInformation("Tracking earthquake at {Position} with Magnitude {Magnitude}", earthQuake.Epicenter,
+                earthQuake.Magnitude);
             var tracker = _serviceProvider.GetService<IEarthQuakeTracker>();
             var trackCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
             _trackers[tracker!] = trackCancellationTokenSource;

@@ -58,9 +58,12 @@ public class EarthQuakeTracker : IEarthQuakeTracker
 
     private async Task CheckEarthQuake(HuaniaEarthQuake huaniaEarthQuake)
     {
-        List<EarthQuakeUpdate> infos = SimulateUpdates ??
-                                       await _earthQuakeApi.GetEarthQuakeInfo(huaniaEarthQuake.EventId,
-                                           _cancellationToken);
+        _logger.LogInformation("Checking earthquake at {Position} with Magnitude {Magnitude}",
+            huaniaEarthQuake.Epicenter,
+            huaniaEarthQuake.Magnitude);
+        var infos = SimulateUpdates ??
+                    await _earthQuakeApi.GetEarthQuakeInfo(huaniaEarthQuake.EventId,
+                        _cancellationToken);
         EarthQuakeUpdate latestInfo;
         if (SimulateTimeSpan == TimeSpan.Zero)
         {
@@ -68,6 +71,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         }
         else
         {
+            _logger.LogWarning("Simulating with simulatingInfo");
             var simulatingInfo = infos.FirstOrDefault(t => t.UpdateAt > DateTime.Now - SimulateTimeSpan);
             if (infos.Count <= 0 && simulatingInfo == null) return;
             if (simulatingInfo == null) simulatingInfo = infos[^1];
@@ -77,6 +81,9 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         if ((DateTime.Now - SimulateTimeSpan - latestInfo.UpdateAt).TotalSeconds >
             _trackingInformation.TheoryCountDown + 30)
         {
+            _logger.LogInformation("Earthquake Expired for {Time} but theory {Theory} Quitting.",
+                (DateTime.Now - SimulateTimeSpan - latestInfo.UpdateAt).TotalSeconds,
+                _trackingInformation.TheoryCountDown + 30);
             _tokenSource?.Cancel(); // Expired Information
             return;
         }
@@ -108,11 +115,30 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                                                        (DateTime.Now - SimulateTimeSpan -
                                                         _trackingInformation.StartTime).TotalSeconds);
                 _trackingInformation.Stage = GetEarthQuakeAlertStage(_trackingInformation);
-                
-                if (SimulateTimeSpan == TimeSpan.Zero || _warningWindow != null)
-                    if (_alertLimit.Setting == null || !ShouldPopupAlert(_trackingInformation, _alertLimit.Setting) ||
-                        _warningWindow != null)
+
+                _logger.LogTrace(
+                    "Tracking Information is {Name}:{Magnitude}  Distance:{Distance}km  Intensity:{Intensity} CountDown: {CountDown}",
+                    _trackingInformation.Position, _trackingInformation.Magnitude, _trackingInformation.Distance,
+                    _trackingInformation.Intensity, _trackingInformation.CountDown);
+
+                if (_warningWindow != null)
+                {
+                    _logger.LogTrace("Already Popped, Refreshing");
+                    return;
+                }
+
+                if (SimulateTimeSpan == TimeSpan.Zero)
+                    if (_alertLimit.Setting == null || !ShouldPopupAlert(_trackingInformation, _alertLimit.Setting))
+                    {
+                        _logger.LogTrace("The Limitation (M:{Magnitude},I:{Intensity}) is NOT reached, Retrying",
+                            _alertLimit.Setting?.Magnitude, _alertLimit.Setting?.Intensity);
                         return;
+                    }
+
+                _logger.LogInformation(
+                    "The Limitation (M:{CurMagnitude}/{Magnitude},I:{CurIntensity}/{Intensity}) REACHED, POPING",
+                    _trackingInformation.Magnitude, _alertLimit.Setting?.Magnitude, _trackingInformation.Intensity,
+                    _alertLimit.Setting?.Intensity);
                 _warningWindow = new EarlyWarningWindow(_trackingInformation, _service);
                 _warningWindow.Show();
             }
