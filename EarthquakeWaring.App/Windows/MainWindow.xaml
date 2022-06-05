@@ -38,8 +38,12 @@
                 <wpfui:NavigationStore.Items>
                     <wpfui:NavigationItem
                         Click="OnNavigatingEarthQuakesList"
-                        Content="地震信息"
+                        Content="地震列表"
                         Icon="Globe24" />
+                    <wpfui:NavigationItem
+                        Click="OnNavigateExamples"
+                        Content="预警案例"
+                        Icon="Book24" />
                 </wpfui:NavigationStore.Items>
                 <wpfui:NavigationStore.Footer>
                     <wpfui:NavigationItem

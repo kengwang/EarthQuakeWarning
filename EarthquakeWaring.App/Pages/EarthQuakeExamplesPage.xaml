@@ -1,15 +1,16 @@
-﻿<Page
-    x:Class="EarthquakeWaring.App.Pages.EarthQuakesListPage"
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:earthQuakeModels="clr-namespace:EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels"
-    xmlns:extensions="clr-namespace:EarthquakeWaring.App.Extensions"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:viewModels="clr-namespace:EarthquakeWaring.App.Infrastructure.Models.ViewModels"
-    xmlns:wpfui="http://schemas.lepo.co/wpfui/2022/xaml"
-    Title="EarthQuakesListPage"
-    mc:Ignorable="d">
+﻿<Page x:Class="EarthquakeWaring.App.Pages.EarthQuakeExamplesPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:EarthquakeWaring.App.Pages"
+      xmlns:wpfui="http://schemas.lepo.co/wpfui/2022/xaml"
+      xmlns:earthQuakeModels="clr-namespace:EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels"
+      xmlns:services="clr-namespace:EarthquakeWaring.App.Services"
+      xmlns:extensions="clr-namespace:EarthquakeWaring.App.Extensions"
+      xmlns:viewModels="clr-namespace:EarthquakeWaring.App.Infrastructure.Models.ViewModels"
+      mc:Ignorable="d"
+      Title="预警案例">
     <d:Page.DataContext>
         <viewModels:EarthQuakesListPageViewModel />
     </d:Page.DataContext>
@@ -38,7 +39,7 @@
                             CornerRadius="5">
                             <wpfui:SymbolIcon Symbol="ErrorCircle24" Visibility="{Binding DontUseShouldAlert, Converter={StaticResource BoolToVisibilityConverter}}" Foreground="{DynamicResource TextFillColorPrimaryBrush}" />
                         </Border>
-                        <Grid MouseDown="ShowEarthQuakeDetail" Tag="{Binding .}" Grid.Column="1" Margin="5">
+                        <Grid MouseDown="ShowEarthQuakeDetail" Tag="{Binding }" Grid.Column="1" Margin="5">
                             <Grid.RowDefinitions>
                                 <RowDefinition />
                                 <RowDefinition />

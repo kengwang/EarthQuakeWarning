@@ -81,6 +81,7 @@ namespace EarthquakeWaring.App
             service.AddTransient<EarthQuakesListPage>();
             service.AddTransient<EarthQuakeDetail>();
             service.AddTransient<SettingsPageViewModel>();
+            service.AddTransient<EarthQuakeExamplesPage>();
             
 
             service.AddHostedService<HeartBeatBackgroundService>();

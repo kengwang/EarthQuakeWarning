@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,6 +43,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
     }
 
     public TimeSpan SimulateTimeSpan { get; set; } = TimeSpan.Zero;
+    public List<EarthQuakeUpdate>? SimulateUpdates { get; set; } = null;
 
     public async Task StartTrack(HuaniaEarthQuake huaniaEarthQuake, CancellationTokenSource cancellationTokenSource)
     {
@@ -56,7 +58,9 @@ public class EarthQuakeTracker : IEarthQuakeTracker
 
     private async Task CheckEarthQuake(HuaniaEarthQuake huaniaEarthQuake)
     {
-        var infos = await _earthQuakeApi.GetEarthQuakeInfo(huaniaEarthQuake.EventId, _cancellationToken);
+        List<EarthQuakeUpdate> infos = SimulateUpdates ??
+                                       await _earthQuakeApi.GetEarthQuakeInfo(huaniaEarthQuake.EventId,
+                                           _cancellationToken);
         EarthQuakeUpdate latestInfo;
         if (SimulateTimeSpan == TimeSpan.Zero)
         {
@@ -104,8 +108,9 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                                                        (DateTime.Now - SimulateTimeSpan -
                                                         _trackingInformation.StartTime).TotalSeconds);
                 _trackingInformation.Stage = GetEarthQuakeAlertStage(_trackingInformation);
+                
                 if (SimulateTimeSpan == TimeSpan.Zero || _warningWindow != null)
-                    if (_alertLimit.Setting == null || ShouldPopupAlert(_trackingInformation, _alertLimit.Setting) ||
+                    if (_alertLimit.Setting == null || !ShouldPopupAlert(_trackingInformation, _alertLimit.Setting) ||
                         _warningWindow != null)
                         return;
                 _warningWindow = new EarlyWarningWindow(_trackingInformation, _service);

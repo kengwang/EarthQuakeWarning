@@ -52,7 +52,7 @@
                 <wpfui:CardControl
                     Title="震级"
                     Margin="0,8,0,0"
-                    Subtitle="震级大于等于此值将会显示警报">
+                    Subtitle="震级大于等于此值才会显示警报">
                     <TextBox Text="{Binding AlertLimit.Setting.Magnitude, Mode=TwoWay}" />
                 </wpfui:CardControl>
                 <wpfui:CardControl

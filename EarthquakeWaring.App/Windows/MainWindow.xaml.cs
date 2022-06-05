@@ -27,5 +27,10 @@ namespace EarthquakeWaring.App.Windows
         {
             RootFrame.Navigate(_services.GetService<EarthQuakesListPage>());
         }
+
+        private void OnNavigateExamples(object sender, RoutedEventArgs e)
+        {
+            RootFrame.Navigate(_services.GetService<EarthQuakeExamplesPage>());
+        }
     }
 }

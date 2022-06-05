@@ -75,17 +75,19 @@ public partial class EarthQuakesListPage : Page
         trackingInformation.Intensity =
             _calculator.GetIntensity(trackingInformation.Magnitude, trackingInformation.Distance);
         trackingInformation.Stage = EarthQuakeTracker.GetEarthQuakeAlertStage(trackingInformation);
-
+        trackingInformation.DontUseShouldAlert =
+            EarthQuakeTracker.ShouldPopupAlert(trackingInformation, _alertLimit.Setting ?? new AlertLimit());
         return trackingInformation;
     }
 
 
-    private void SimulateEarthQuake(object sender, RoutedEventArgs e)
+    private async void SimulateEarthQuake(object sender, RoutedEventArgs e)
     {
         var cancellationTokenSource = new CancellationTokenSource();
         var info = (((sender as Button)?.Tag as EarthQuakeTrackingInformation)!);
         var tracker = _service.GetService<IEarthQuakeTracker>();
         tracker!.SimulateTimeSpan = DateTime.Now - info.StartTime;
+        tracker!.SimulateUpdates = await _quakeApi.GetEarthQuakeInfo(info.EventId, cancellationTokenSource.Token);
         tracker?.StartTrack(new HuaniaEarthQuake()
         {
             EventId = info.EventId
@@ -96,7 +98,7 @@ public partial class EarthQuakesListPage : Page
     {
         if (((Grid)sender).Tag is EarthQuakeTrackingInformation info)
         {
-            _service.GetService<MainWindow>()?.RootFrame.Navigate(new EarthQuakeDetail(info,_currentPosition.Setting));
+            _service.GetService<MainWindow>()?.RootFrame.Navigate(new EarthQuakeDetail(info, _currentPosition.Setting));
         }
     }
 }
