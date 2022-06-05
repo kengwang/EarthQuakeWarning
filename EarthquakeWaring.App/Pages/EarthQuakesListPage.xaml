@@ -1,0 +1,97 @@
+﻿<Page
+    x:Class="EarthquakeWaring.App.Pages.EarthQuakesListPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:earthQuakeModels="clr-namespace:EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels"
+    xmlns:extensions="clr-namespace:EarthquakeWaring.App.Extensions"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="clr-namespace:EarthquakeWaring.App.Infrastructure.Models.ViewModels"
+    xmlns:wpfui="http://schemas.lepo.co/wpfui/2022/xaml"
+    Title="EarthQuakesListPage"
+    mc:Ignorable="d">
+    <d:Page.DataContext>
+        <viewModels:EarthQuakesListPageViewModel />
+    </d:Page.DataContext>
+    <Page.Resources>
+        <extensions:EarthQuakeStageToColorBrush x:Key="StageToColor" />
+        <extensions:DoubleLimiter x:Key="DoubleLimiter" />
+        <extensions:DateTimeHumanizer x:Key="DateTimeHumanizer" />
+    </Page.Resources>
+    <Grid>
+        <ListView x:Name="ListView" ItemsSource="{Binding InformationList}">
+            <ListView.ItemTemplate>
+                <DataTemplate DataType="{x:Type earthQuakeModels:EarthQuakeTrackingInformation}">
+                    <Grid Height="75" Margin="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Rectangle
+                            Grid.Column="0"
+                            Width="45"
+                            Height="45"
+                            Margin="5"
+                            Fill="{Binding Stage, Converter={StaticResource StageToColor}}"
+                            RadiusX="5"
+                            RadiusY="5" />
+                        <Grid Grid.Column="1" Margin="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                                <RowDefinition />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text="{Binding Magnitude, Converter={StaticResource DoubleLimiter}}" />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    FontSize="18"
+                                    Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                                    Text=" 级" />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Margin="8,0,0,0"
+                                    FontSize="18"
+                                    FontWeight="Bold"
+                                    Text="{Binding Position}" />
+                            </Grid>
+                            <TextBlock Grid.Row="1" Text="{Binding Description}" />
+                            <Grid Grid.Row="2">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Foreground="{DynamicResource ControlFillColorSecondaryBrush}"
+                                    Text="发震时刻: " />
+                                <TextBlock
+                                    Grid.Column="1"
+                                    Foreground="{DynamicResource ControlFillColorSecondaryBrush}"
+                                    Text="{Binding StartTime, Converter={StaticResource DateTimeHumanizer}}" />
+                            </Grid>
+
+                        </Grid>
+                        <wpfui:Button
+                            Grid.Column="2"
+                            Appearance="Primary"
+                            Click="SimulateEarthQuake"
+                            Tag="{Binding}"
+                            Content="模拟" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>
