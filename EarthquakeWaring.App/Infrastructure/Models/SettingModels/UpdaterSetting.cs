@@ -5,35 +5,14 @@ using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 
 namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 
-public class AlertLimit : INotificationOption
+public class UpdaterSetting : INotificationOption
 {
-    private double _dayMagnitude = 3.0;
-    private double _dayIntensity = 2.0;
-    private double _nightMagnitude;
-    private double _nightIntensity;
+    private int _updateTimeSpanSecond = 5;
 
-    public double DayMagnitude
+    public int UpdateTimeSpanSecond
     {
-        get => _dayMagnitude;
-        set => SetField(ref _dayMagnitude, value);
-    }
-
-    public double DayIntensity
-    {
-        get => _dayIntensity;
-        set => SetField(ref _dayIntensity, value);
-    }
-
-    public double NightMagnitude
-    {
-        get => _nightMagnitude;
-        set => SetField(ref _nightMagnitude, value);
-    }
-
-    public double NightIntensity
-    {
-        get => _nightIntensity;
-        set => SetField(ref _nightIntensity, value);
+        get => _updateTimeSpanSecond;
+        set => SetField(ref _updateTimeSpanSecond, value);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

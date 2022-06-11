@@ -60,8 +60,8 @@ namespace EarthquakeWaring.App
             }
             else
             {
-                Host.RunAsync();
                 Host.Services.GetService<MainWindow>()?.Show();
+                Host.StartAsync();
             }
         }
 

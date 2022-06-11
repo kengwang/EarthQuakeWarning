@@ -50,19 +50,46 @@
             Subtitle="请手动输入警报阈值">
             <StackPanel Orientation="Vertical">
                 <wpfui:CardControl
-                    Title="震级"
+                    Title="日间震级"
                     Margin="0,8,0,0"
-                    Subtitle="震级大于等于此值才会显示警报">
-                    <TextBox Text="{Binding AlertLimit.Setting.Magnitude, Mode=TwoWay}" />
+                    Subtitle="7时 - 22时 震级大于等于此值才会显示警报">
+                    <TextBox Text="{Binding AlertLimit.Setting.DayMagnitude, Mode=TwoWay}" />
                 </wpfui:CardControl>
                 <wpfui:CardControl
-                    Title="烈度"
+                    Title="日间烈度"
                     Margin="0,8,0,0"
-                    Subtitle="烈度大于等于此值将会显示警报">
-                    <TextBox Text="{Binding AlertLimit.Setting.Intensity, Mode=TwoWay}" />
+                    Subtitle="7时 - 22时 烈度大于等于此值将会显示警报">
+                    <TextBox Text="{Binding AlertLimit.Setting.DayIntensity, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Title="夜间震级"
+                    Margin="0,8,0,0"
+                    Subtitle="23时 - 明日 6时 震级大于等于此值才会显示警报">
+                    <TextBox Text="{Binding AlertLimit.Setting.NightMagnitude, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Title="夜间烈度"
+                    Margin="0,8,0,0"
+                    Subtitle="23时 - 明日 6时 烈度大于等于此值将会显示警报">
+                    <TextBox Text="{Binding AlertLimit.Setting.NightIntensity, Mode=TwoWay}" />
                 </wpfui:CardControl>
             </StackPanel>
         </wpfui:CardExpander>
+        <wpfui:CardControl
+            Icon="History24"
+            Title="检测时间间隔"
+            Margin="0,12,0,0"
+            ToolTip="{Binding UpdateSetting.Setting.UpdateTimeSpanSecond, Mode=OneWay}"
+            Subtitle="单位：秒  为了缓解源服务器压力，最低为 3 秒，请酌情设置">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Foreground="{DynamicResource TextFillColorPrimaryBrush}" Text="{Binding UpdateSetting.Setting.UpdateTimeSpanSecond, Mode=OneWay}" />
+                <Slider Grid.Column="1" Minimum="3" Maximum="60" Value="{Binding UpdateSetting.Setting.UpdateTimeSpanSecond, Mode=TwoWay}" />
+            </Grid>
+        </wpfui:CardControl>
         <wpfui:CardControl Margin="0,12,0,0" Title="开机启动" Subtitle="设置开机启动" Icon="Power24">
             <wpfui:ToggleSwitch x:Name="StartupSwitch" Unchecked="StartupSwitch_OnUnchecked" Checked="ToggleButton_OnChecked" />
         </wpfui:CardControl>
