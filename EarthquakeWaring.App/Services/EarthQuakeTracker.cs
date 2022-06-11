@@ -58,7 +58,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
 
     private async Task CheckEarthQuake(HuaniaEarthQuake huaniaEarthQuake)
     {
-        _logger.LogInformation("Checking earthquake at {Position} with Magnitude {Magnitude}",
+        _logger.LogInformation("Checking earthquake at {Position} with DayMagnitude {DayMagnitude}",
             huaniaEarthQuake.Epicenter,
             huaniaEarthQuake.Magnitude);
         var infos = SimulateUpdates ??
@@ -117,7 +117,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                 _trackingInformation.Stage = GetEarthQuakeAlertStage(_trackingInformation);
 
                 _logger.LogTrace(
-                    "Tracking Information is {Name}:{Magnitude}  Distance:{Distance}km  Intensity:{Intensity} CountDown: {CountDown}",
+                    "Tracking Information is {Name}:{DayMagnitude}  Distance:{Distance}km  Intensity:{Intensity} CountDown: {CountDown}",
                     _trackingInformation.Position, _trackingInformation.Magnitude, _trackingInformation.Distance,
                     _trackingInformation.Intensity, _trackingInformation.CountDown);
 
@@ -130,15 +130,15 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                 if (SimulateTimeSpan == TimeSpan.Zero)
                     if (_alertLimit.Setting == null || !ShouldPopupAlert(_trackingInformation, _alertLimit.Setting))
                     {
-                        _logger.LogTrace("The Limitation (M:{Magnitude},I:{Intensity}) is NOT reached, Retrying",
-                            _alertLimit.Setting?.Magnitude, _alertLimit.Setting?.Intensity);
+                        _logger.LogTrace("The Limitation (M:{DayMagnitude},I:{Intensity}) is NOT reached, Retrying",
+                            _alertLimit.Setting?.DayMagnitude, _alertLimit.Setting?.DayIntensity);
                         return;
                     }
 
                 _logger.LogInformation(
-                    "The Limitation (M:{CurMagnitude}/{Magnitude},I:{CurIntensity}/{Intensity}) REACHED, POPING",
-                    _trackingInformation.Magnitude, _alertLimit.Setting?.Magnitude, _trackingInformation.Intensity,
-                    _alertLimit.Setting?.Intensity);
+                    "The Limitation (M:{CurMagnitude}/{DayMagnitude},I:{CurIntensity}/{Intensity}) REACHED, POPING",
+                    _trackingInformation.Magnitude, _alertLimit.Setting?.DayMagnitude, _trackingInformation.Intensity,
+                    _alertLimit.Setting?.DayIntensity);
                 _warningWindow = new EarlyWarningWindow(_trackingInformation, _service);
                 _warningWindow.Show();
             }
@@ -163,6 +163,13 @@ public class EarthQuakeTracker : IEarthQuakeTracker
 
     public static bool ShouldPopupAlert(EarthQuakeTrackingInformation information, AlertLimit alertLimit)
     {
-        return information.Intensity >= alertLimit.Intensity;
+        if (information.UpdateTime.Hour is >= 7 and <= 22)
+        {
+            // 日间
+            return information.Intensity >= alertLimit.DayIntensity && information.Magnitude >= alertLimit.DayMagnitude;
+        }
+
+        // 夜间
+        return information.Intensity >= alertLimit.NightIntensity && information.Magnitude >= alertLimit.NightIntensity;
     }
 }

@@ -37,7 +37,7 @@ public partial class EarlyWarningWindow : Window
         basicInfoSpeech.SelectVoice(_speech.GetInstalledVoices(CultureInfo.InstalledUICulture)[0].VoiceInfo.Name);
         basicInfoSpeech.SetOutputToDefaultAudioDevice();
         basicInfoSpeech.SpeakAsync(
-            $"{information.Position} 发生地震，震级 {information.Magnitude:F1} 级，烈度 {information.Intensity:F1}" +
+            $"{information.Position} 发生地震，震级 {information.Magnitude:F1} 级" +
             new IntensityDescriptor().Convert(_information.Intensity, typeof(string), null, null));
         _information.PropertyChanged += InformationOnPropertyChanged;
     }

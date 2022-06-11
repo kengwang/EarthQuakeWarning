@@ -157,7 +157,7 @@
             <TextBlock Grid.Row="2"
                        FontSize="15"
                        Foreground="{DynamicResource TextFillColorSecondaryBrush}"
-                       Text="中国地震预警网 大陆地震预警中心&#x0a;成都市应急管理局"
+                       Text="中国地震预警网 大陆地震预警中心&#x0a;成都高新减灾研究所"
                        TextAlignment="Center" />
         </Grid>
     </Grid>
