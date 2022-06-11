@@ -60,8 +60,8 @@ public partial class EarthQuakeExamplesPage : Page
         {
             // Update the tracking information
             Position = latestInfo.Epicenter,
-            StartTime = latestInfo.StartAt,
-            UpdateTime = latestInfo.UpdateAt,
+            StartTime = latestInfo.StartAt.AddHours(16),
+            UpdateTime = latestInfo.UpdateAt.AddHours(16),
             Depth = latestInfo.Depth,
             Latitude = latestInfo.Latitude,
             Longitude = latestInfo.Longitude,
@@ -92,7 +92,12 @@ public partial class EarthQuakeExamplesPage : Page
         var tracker = _service.GetService<IEarthQuakeTracker>();
         tracker!.SimulateTimeSpan = DateTime.Now - info.StartTime;
         var results = _jsonConvert.ConvertTo<List<EarthQuakeUpdate>>(Examples);
-        tracker!.SimulateUpdates = results?.Where(t => t.EventId == info.EventId).ToList();
+        tracker!.SimulateUpdates = results?.Where(t => t.EventId == info.EventId).Select(t =>
+        {
+            t.StartAt = t.StartAt.AddHours(16);
+            t.UpdateAt = t.UpdateAt.AddHours(16);
+            return t;
+        }).ToList();
         tracker?.StartTrack(new HuaniaEarthQuake()
         {
             EventId = info.EventId
