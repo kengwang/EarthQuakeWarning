@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Windows;
 using EarthquakeWaring.App.Pages;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace EarthquakeWaring.App.Windows
 {
@@ -13,12 +12,10 @@ namespace EarthquakeWaring.App.Windows
     public partial class MainWindow : Window
     {
         private readonly IServiceProvider _services;
-        private readonly IHostApplicationLifetime _lifetime;
 
-        public MainWindow(IServiceProvider services, IHostApplicationLifetime lifetime)
+        public MainWindow(IServiceProvider services)
         {
             _services = services;
-            _lifetime = lifetime;
             InitializeComponent();
         }
 
