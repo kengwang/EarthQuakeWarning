@@ -33,7 +33,7 @@ public partial class SettingsPage : Page
 
     private void OpenPositionSelector(object sender, RoutedEventArgs e)
     {
-            Process.Start("explorer.exe", "https://lbs.amap.com/tools/picker");
+        Process.Start("explorer.exe", "https://lbs.amap.com/tools/picker");
     }
 
     private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)

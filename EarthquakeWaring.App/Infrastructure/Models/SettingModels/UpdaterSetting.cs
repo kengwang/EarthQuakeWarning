@@ -8,6 +8,13 @@ namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 public class UpdaterSetting : INotificationOption
 {
     private int _updateTimeSpanSecond = 5;
+    private bool _showNotifyIcon = true;
+
+    public bool ShowNotifyIcon
+    {
+        get => _showNotifyIcon;
+        set => SetField(ref _showNotifyIcon, value);
+    }
 
     public int UpdateTimeSpanSecond
     {

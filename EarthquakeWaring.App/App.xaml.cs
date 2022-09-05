@@ -5,6 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using EarthquakeWaring.App.Extensions;
 using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
+using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Pages;
@@ -57,14 +58,15 @@ namespace EarthquakeWaring.App
                 process.Kill(true);
             }
 
-           
 
             // Check if want GUI
             if (!e.Args.Contains("/nogui"))
             {
                 Host.Services.GetService<MainWindow>()?.ShowDialog();
             }
-            Host.Services.GetService<ITrayIconHolder>()?.ShowIcon();
+
+            if (Host.Services.GetService<ISetting<UpdaterSetting>>()?.Setting?.ShowNotifyIcon is not false)
+                Host.Services.GetService<ITrayIconHolder>()?.ShowIcon();
             Host.RunAsync();
         }
 
@@ -88,7 +90,7 @@ namespace EarthquakeWaring.App
             service.AddTransient<SettingsPageViewModel>();
             service.AddTransient<EarthQuakeExamplesPage>();
 
-            service.AddSingleton<ITrayIconHolder,TrayIconHolder>();
+            service.AddSingleton<ITrayIconHolder, TrayIconHolder>();
 
             service.AddHostedService<HeartBeatBackgroundService>();
         }
