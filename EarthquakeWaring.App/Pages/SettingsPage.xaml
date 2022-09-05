@@ -93,6 +93,7 @@
         <wpfui:CardControl Margin="0,12,0,0" Title="开机启动" Subtitle="设置开机启动" Icon="Power24">
             <wpfui:ToggleSwitch x:Name="StartupSwitch" Unchecked="StartupSwitch_OnUnchecked" Checked="ToggleButton_OnChecked" />
         </wpfui:CardControl>
+        <wpfui:CardControl Margin="0,12,0,0" Title="关闭服务" Subtitle="关闭后台服务, 退出程序" Icon="Power24" Click="CloseClick" />
         <wpfui:CardControl Margin="0,12,0,0" Title="开发者" Subtitle="Kengwang" Icon="Person24" Click="DeveloperClicked" />
         <wpfui:CardControl Margin="0,12,0,0" Title="EarthQuakeWarning 地震预警" Subtitle="{Binding Version}" Icon="Warning24" />
         <wpfui:CardControl Margin="0,12,0,0" Title="开源地址" Subtitle="https://github.com/kengwang/EarthQuakeWarning" Icon="Box24" Click="OpenSourceClick" />

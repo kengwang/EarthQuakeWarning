@@ -11,6 +11,7 @@
         <AssemblyVersion>1.0.2.0</AssemblyVersion>
         <FileVersion>1.0.2.0</FileVersion>
         <NeutralLanguage>zh-Hans</NeutralLanguage>
+        <UseWindowsForms>True</UseWindowsForms>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,6 +27,12 @@
 
     <ItemGroup>
       <Folder Include="Tests" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Icons\radio.ico">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

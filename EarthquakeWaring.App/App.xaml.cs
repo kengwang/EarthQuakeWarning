@@ -53,12 +53,16 @@ namespace EarthquakeWaring.App
                 process.Kill(true);
             }
 
+           
+
             // Check if want GUI
             if (!e.Args.Contains("/nogui"))
             {
                 Host.Services.GetService<MainWindow>()?.ShowDialog();
             }
-            Host.Run();
+            
+            Host.Services.GetService<ITrayIconHolder>()?.ShowIcon();
+            Host.RunAsync();
         }
 
         public static void ConfigureServices(IServiceCollection service)
@@ -74,13 +78,14 @@ namespace EarthquakeWaring.App
             service.AddSingleton(typeof(ISetting<>), typeof(FileJsonSetting<>));
 
             // For UI
-            service.AddSingleton<MainWindow>();
+            service.AddTransient<MainWindow>();
             service.AddTransient<SettingsPage>();
             service.AddTransient<EarthQuakesListPage>();
             service.AddTransient<EarthQuakeDetail>();
             service.AddTransient<SettingsPageViewModel>();
             service.AddTransient<EarthQuakeExamplesPage>();
 
+            service.AddSingleton<ITrayIconHolder,TrayIconHolder>();
 
             service.AddHostedService<HeartBeatBackgroundService>();
         }
