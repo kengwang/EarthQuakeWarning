@@ -6,7 +6,9 @@ using System.Windows.Controls;
 using EarthquakeWaring.App.Infrastructure.Models;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
+using EarthquakeWaring.App.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
 
 namespace EarthquakeWaring.App.Pages;
@@ -15,10 +17,12 @@ public partial class SettingsPage : Page
 {
     private bool dontFire = false;
     private readonly IServiceProvider _services;
+    private readonly IHostApplicationLifetime _lifetime;
 
-    public SettingsPage(SettingsPageViewModel vm, IServiceProvider services)
+    public SettingsPage(SettingsPageViewModel vm, IServiceProvider services, IHostApplicationLifetime lifetime)
     {
         _services = services;
+        _lifetime = lifetime;
         InitializeComponent();
         DataContext = vm;
         dontFire= true;
@@ -59,5 +63,11 @@ public partial class SettingsPage : Page
     private void ThanksClick(object sender, RoutedEventArgs e)
     {
         Process.Start("explorer.exe", "http://www.365icl.com/");
+    }
+
+    private void CloseClick(object sender, RoutedEventArgs e)
+    {
+        _lifetime.StopApplication();
+        Application.Current.Shutdown();
     }
 }
