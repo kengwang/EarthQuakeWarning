@@ -3,6 +3,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using EarthquakeWaring.App.Extensions;
 using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
@@ -25,14 +26,14 @@ public partial class EarthQuakesListPage : Page
     private readonly EarthQuakesListPageViewModel _viewModel;
 
 
-    public EarthQuakesListPage(IEarthQuakeCalculator calculator, IEarthQuakeApi quakeApi,
-        ISetting<AlertLimit> alertLimit, ISetting<CurrentPosition> currentPosition, IServiceProvider service)
+    public EarthQuakesListPage()
     {
-        _calculator = calculator;
-        _quakeApi = quakeApi;
-        _alertLimit = alertLimit;
-        _currentPosition = currentPosition;
-        _service = service;
+        _service = DI.Services;
+        _calculator =_service.GetRequiredService<IEarthQuakeCalculator>();
+        _quakeApi = _service.GetRequiredService<IEarthQuakeApi>();
+        _alertLimit = _service.GetRequiredService<ISetting<AlertLimit>>();
+        _currentPosition = _service.GetRequiredService<ISetting<CurrentPosition> >();
+        
         _viewModel = new EarthQuakesListPageViewModel();
         InitializeComponent();
     }
@@ -40,11 +41,14 @@ public partial class EarthQuakesListPage : Page
     protected override async void OnInitialized(EventArgs e)
     {
         base.OnInitialized(e);
+        _viewModel.ProgressRingVisibility = Visibility.Visible;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
         var results = await _quakeApi.GetEarthQuakeList(0, cancellationToken);
         results.ForEach(t => _viewModel.InformationList.Add(ConvertToInformation(t)));
         ListView.ItemsSource = _viewModel.InformationList;
+        _viewModel.ProgressRingVisibility = Visibility.Collapsed;
+        LoadingRing.Visibility = Visibility.Collapsed;
     }
 
     private EarthQuakeTrackingInformation ConvertToInformation(HuaniaEarthQuake latestInfo)

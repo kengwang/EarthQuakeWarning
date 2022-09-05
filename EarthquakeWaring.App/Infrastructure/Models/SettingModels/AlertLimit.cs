@@ -9,8 +9,8 @@ public class AlertLimit : INotificationOption
 {
     private double _dayMagnitude = 3.0;
     private double _dayIntensity = 2.0;
-    private double _nightMagnitude;
-    private double _nightIntensity;
+    private double _nightMagnitude = 2.0;
+    private double _nightIntensity = 2.0;
 
     public double DayMagnitude
     {

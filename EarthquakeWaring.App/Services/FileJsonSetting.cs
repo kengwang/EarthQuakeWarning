@@ -6,13 +6,13 @@ using Microsoft.Extensions.Logging;
 
 namespace EarthquakeWaring.App.Services;
 
-public class FileJsonSetting<TSetting> : ISetting<TSetting> where TSetting : INotificationOption
+public class FileJsonSetting<TSetting> : ISetting<TSetting> where TSetting : INotificationOption, new()
 {
     private readonly IJsonConvertService _jsonConvertService;
     private readonly ILogger<FileJsonSetting<TSetting>> _logger;
 
     private TSetting? _inMemorySetting;
-    private string _settingName = nameof(TSetting);
+    private readonly string _settingName;
 
     public TSetting? Setting => _inMemorySetting;
 
@@ -71,12 +71,12 @@ public class FileJsonSetting<TSetting> : ISetting<TSetting> where TSetting : INo
             else
             {
                 File.WriteAllText($"settings/{_settingName}.json", "{}");
-                _inMemorySetting = default;
+                _inMemorySetting = new TSetting();
             }
         }
         catch (Exception e)
         {
-            _inMemorySetting = default;
+            _inMemorySetting = new TSetting();
         }
     }
 }

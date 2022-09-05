@@ -54,15 +54,11 @@ namespace EarthquakeWaring.App
             }
 
             // Check if want GUI
-            if (e.Args.Contains("/nogui"))
+            if (!e.Args.Contains("/nogui"))
             {
-                Host.Run();
+                Host.Services.GetService<MainWindow>()?.ShowDialog();
             }
-            else
-            {
-                Host.Services.GetService<MainWindow>()?.Show();
-                Host.StartAsync();
-            }
+            Host.Run();
         }
 
         public static void ConfigureServices(IServiceCollection service)

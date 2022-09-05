@@ -6,6 +6,11 @@
         <Nullable>enable</Nullable>
         <UseWPF>true</UseWPF>
         <LangVersion>latest</LangVersion>
+        <IsPackable>false</IsPackable>
+        <PackageVersion>1.0.1</PackageVersion>
+        <AssemblyVersion>1.0.2.0</AssemblyVersion>
+        <FileVersion>1.0.2.0</FileVersion>
+        <NeutralLanguage>zh-Hans</NeutralLanguage>
     </PropertyGroup>
 
     <ItemGroup>
