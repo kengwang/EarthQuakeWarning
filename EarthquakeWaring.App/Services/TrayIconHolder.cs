@@ -16,6 +16,7 @@ public class TrayIconHolder : ITrayIconHolder, IDisposable
     {
         _sp = sp;
         _notifyIcon = new System.Windows.Forms.NotifyIcon();
+        _notifyIcon.Text = "地震预警 正在运行";
         _notifyIcon.Icon = new System.Drawing.Icon(@"Icons\radio.ico");
         _notifyIcon.Click += NotifyIconOnClick;
     }
