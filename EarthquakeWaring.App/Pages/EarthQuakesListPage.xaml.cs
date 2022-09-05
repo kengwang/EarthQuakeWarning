@@ -99,7 +99,16 @@ public partial class EarthQuakesListPage : Page
     {
         if (((Grid)sender).Tag is EarthQuakeTrackingInformation info)
         {
-            _service.GetService<MainWindow>()?.RootFrame.Navigate(new EarthQuakeDetail(info, _currentPosition.Setting));
+            // _service.GetService<MainWindow>()?.RootFrame.Navigate(new EarthQuakeDetail(info, _currentPosition.Setting));
+            if (!App.MainWindowOpened)
+            {
+                _service.GetService<MainWindow>()?.Show();
+            }
+
+            if (App.MainWindowOpened)
+            {
+                App.RootFrame?.Navigate(new EarthQuakeDetail(info, _currentPosition.Setting));
+            }
         }
     }
 }

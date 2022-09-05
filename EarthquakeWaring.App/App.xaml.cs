@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using EarthquakeWaring.App.Extensions;
 using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
@@ -22,6 +23,9 @@ namespace EarthquakeWaring.App
     public partial class App : Application
     {
         public readonly IHost Host;
+
+        public static bool MainWindowOpened = false;
+        public static Frame? RootFrame = null;
 
         public App()
         {
@@ -60,7 +64,6 @@ namespace EarthquakeWaring.App
             {
                 Host.Services.GetService<MainWindow>()?.ShowDialog();
             }
-            
             Host.Services.GetService<ITrayIconHolder>()?.ShowIcon();
             Host.RunAsync();
         }

@@ -10,7 +10,6 @@ public class TrayIconHolder : ITrayIconHolder, IDisposable
 {
     private readonly IServiceProvider _sp;
     private readonly NotifyIcon _notifyIcon;
-    private bool _mainWindowOpened;
 
     public TrayIconHolder(IServiceProvider sp)
     {
@@ -23,10 +22,9 @@ public class TrayIconHolder : ITrayIconHolder, IDisposable
 
     private void NotifyIconOnClick(object? sender, EventArgs e)
     {
-        if (_mainWindowOpened) return;
-        _mainWindowOpened = true;
+        if (App.MainWindowOpened) return;
         _sp.GetService<MainWindow>()?.ShowDialog();
-        _mainWindowOpened = false;
+        App.MainWindowOpened = false;
     }
 
     public void ShowIcon()

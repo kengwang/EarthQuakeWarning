@@ -1,0 +1,39 @@
+﻿<Page
+    x:Class="EarthquakeWaring.App.Pages.WelcomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="欢迎">
+    <StackPanel VerticalAlignment="Center">
+        <TextBlock
+            FontSize="64"
+            FontWeight="Bold"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Text="欢迎使用 地震预警"
+            TextAlignment="Center" />
+        <TextBlock
+            FontSize="28"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Text="此 App 非官方提供, 请勿用于生产环境"
+            TextAlignment="Center" />
+        <TextBlock
+            FontSize="28"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Text="仅供学习交流使用,下载后请在 24 小时内删除"
+            TextAlignment="Center" />
+        <TextBlock
+            FontSize="28"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Text="请勿传播或进行二次分享"
+            TextAlignment="Center" />
+        <TextBlock
+            FontSize="28"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Text="使用前请前往设置进行配置"
+            TextAlignment="Center" />
+        <TextBlock
+            FontSize="28"
+            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+            Text="关闭本窗口即可进入后台开始预警服务"
+            TextAlignment="Center" />
+    </StackPanel>
+</Page>

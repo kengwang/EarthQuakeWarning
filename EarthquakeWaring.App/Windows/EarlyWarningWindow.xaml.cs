@@ -82,10 +82,22 @@ public partial class EarlyWarningWindow : Window
 
     private void ShowDetail(object sender, MouseButtonEventArgs e)
     {
+        /*
         var mainWindow = _service.GetService<MainWindow>();
         mainWindow?.RootFrame.Navigate(new EarthQuakeDetail(_information,
             _service.GetService<ISetting<CurrentPosition>>()?.Setting));
         mainWindow?.Show();
+        */
+        if (!App.MainWindowOpened)
+        {
+            _service.GetService<MainWindow>()?.Show();
+        }
+
+        if (App.MainWindowOpened)
+        {
+            App.RootFrame?.Navigate(new EarthQuakeDetail(_information,
+                _service.GetService<ISetting<CurrentPosition>>()?.Setting));
+        }
     }
 
     private void EarlyWarningWindow_OnClosed(object? sender, EventArgs e)
