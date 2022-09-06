@@ -110,7 +110,7 @@
         <wpfui:CardControl
             Title="显示后台通知区域图标"
             Margin="0,12,0,0"
-            Icon="ApprovalsApp20"
+            Icon="ContractDownLeft24"
             Subtitle="是否显示通知区域(托盘)图标, 如果不生效请尝试点击下方 退出程序 后重启应用">
             <wpfui:ToggleSwitch x:Name="ShowNotifyIcon" IsChecked="{Binding UpdateSetting.Setting.ShowNotifyIcon}" />
         </wpfui:CardControl>

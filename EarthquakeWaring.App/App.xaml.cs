@@ -62,7 +62,7 @@ namespace EarthquakeWaring.App
             // Check if want GUI
             if (!e.Args.Contains("/nogui"))
             {
-                Host.Services.GetService<MainWindow>()?.ShowDialog();
+                Host.Services.GetService<MainWindow>()?.Show();
             }
 
             if (Host.Services.GetService<ISetting<UpdaterSetting>>()?.Setting?.ShowNotifyIcon is not false)

@@ -11,7 +11,6 @@ using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Pages;
-using EarthquakeWaring.App.Services;
 using Microsoft.Extensions.DependencyInjection;
 using static System.Threading.Tasks.Task;
 
