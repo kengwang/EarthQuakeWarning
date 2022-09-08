@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
+using EarthquakeWaring.App.Icons;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Windows;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +18,12 @@ public class TrayIconHolder : ITrayIconHolder, IDisposable
         _sp = sp;
         _notifyIcon = new NotifyIcon();
         _notifyIcon.Text = "地震预警 正在运行";
-        _notifyIcon.Icon = new System.Drawing.Icon(@"Icons\radio.ico");
+        if (!File.Exists(@"Icons\Original.ico"))
+        {
+            var imageOriginal = Convert.FromBase64String(IconResource.Original);
+            File.WriteAllBytes(@"Icons\original.ico",imageOriginal);
+        }
+        _notifyIcon.Icon = new System.Drawing.Icon(@"Icons\original.ico");
         _notifyIcon.Click += NotifyIconOnClick;
     }
 
