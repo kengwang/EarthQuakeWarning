@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using EarthquakeWaring.App.Extensions;
@@ -30,6 +32,7 @@ namespace EarthquakeWaring.App
 
         public App()
         {
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!);
             var builder = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder();
             builder.ConfigureServices(ConfigureServices)
                 .ConfigureLogging(ConfigureLogging);
