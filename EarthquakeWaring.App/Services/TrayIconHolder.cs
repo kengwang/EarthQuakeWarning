@@ -18,6 +18,7 @@ public class TrayIconHolder : ITrayIconHolder, IDisposable
         _sp = sp;
         _notifyIcon = new NotifyIcon();
         _notifyIcon.Text = "地震预警 正在运行";
+        Directory.CreateDirectory("Icons");
         if (!File.Exists(@"Icons\Original.ico"))
         {
             var imageOriginal = Convert.FromBase64String(IconResource.Original);

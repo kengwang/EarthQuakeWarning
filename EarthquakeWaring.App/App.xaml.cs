@@ -32,7 +32,7 @@ namespace EarthquakeWaring.App
 
         public App()
         {
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!);
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(Process.GetCurrentProcess().MainModule!.FileName)!);
             var builder = Microsoft.Extensions.Hosting.Host.CreateDefaultBuilder();
             builder.ConfigureServices(ConfigureServices)
                 .ConfigureLogging(ConfigureLogging);

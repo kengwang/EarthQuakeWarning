@@ -8,8 +8,8 @@
         <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
         <PackageVersion>1.0.3</PackageVersion>
-        <AssemblyVersion>1.0.2.0</AssemblyVersion>
-        <FileVersion>1.0.2.0</FileVersion>
+        <AssemblyVersion>1.0.4.0</AssemblyVersion>
+        <FileVersion>1.0.4.0</FileVersion>
         <NeutralLanguage>zh-Hans</NeutralLanguage>
         <UseWindowsForms>True</UseWindowsForms>
     </PropertyGroup>
