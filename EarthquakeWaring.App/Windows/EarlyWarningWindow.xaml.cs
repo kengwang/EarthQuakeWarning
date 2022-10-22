@@ -21,12 +21,16 @@ public partial class EarlyWarningWindow : Window
     private readonly EarthQuakeTrackingInformation _information;
     private readonly IServiceProvider _service;
     private readonly SpeechSynthesizer _speech;
+    private readonly IntensityDescriptor _intensityDescriptor = new();
+    private readonly ISetting<TrackerSetting> _trackerSetting;
+    private string lastDescription = null!;
     private Prompt? _lastPrompt;
 
     public EarlyWarningWindow(EarthQuakeTrackingInformation information, IServiceProvider service)
     {
         _information = information;
         _service = service;
+        _trackerSetting = _service.GetRequiredService<ISetting<TrackerSetting>>();
         DataContext = information;
         InitializeComponent();
         _speech = new SpeechSynthesizer();
@@ -35,9 +39,10 @@ public partial class EarlyWarningWindow : Window
         var basicInfoSpeech = new SpeechSynthesizer();
         basicInfoSpeech.SelectVoice(_speech.GetInstalledVoices(CultureInfo.InstalledUICulture)[0].VoiceInfo.Name);
         basicInfoSpeech.SetOutputToDefaultAudioDevice();
-        basicInfoSpeech.SpeakAsync(
-            $"{information.Position} 发生地震，震级 {information.Magnitude:F1} 级" +
-            new IntensityDescriptor().Convert(_information.Intensity, typeof(string), null, null));
+        if (_trackerSetting.Setting?.BroadcastEarthQuakeInformation is true)
+            basicInfoSpeech.SpeakAsync(
+                $"{information.Position} 发生地震，震级 {information.Magnitude:F1} 级" +
+                _intensityDescriptor.Convert(_information.Intensity, typeof(string), null!, null!));
         _information.PropertyChanged += InformationOnPropertyChanged;
     }
 
@@ -58,8 +63,8 @@ public partial class EarlyWarningWindow : Window
             {
                 _information.PropertyChanged -= InformationOnPropertyChanged;
                 _speech.SpeakAsync("地震波已到达，" +
-                                   new IntensityDescriptor().Convert(_information.Intensity, typeof(string), null,
-                                       null));
+                                   _intensityDescriptor.Convert(_information.Intensity, typeof(string), null!,
+                                       null!));
                 return;
             }
 
@@ -71,6 +76,31 @@ public partial class EarlyWarningWindow : Window
                 EarthQuakeStage.Forced => 2,
                 _ => 0
             };
+            if (_trackerSetting.Setting?.BroadcastLiveIntensity is true)
+            {
+                var currentIntensityDescription =
+                    _intensityDescriptor.Convert(_information.Intensity, typeof(string), null!, null!) as string ??
+                    "未知";
+                if (currentIntensityDescription != lastDescription)
+                {
+                    lastDescription = currentIntensityDescription;
+                    _speech.SpeakAsync(new Prompt(lastDescription));
+                }
+            }
+
+            if (_trackerSetting.Setting?.BroadcastLiveTips is true)
+            {
+                switch (_information.Intensity)
+                {
+                    case >= 4 and <= 5:
+                        _speech.SpeakAsync(new Prompt("躲避悬挂"));
+                        break;
+                    case > 5:
+                        _speech.SpeakAsync(new Prompt("迅速逃生"));
+                        break;
+                }
+            }
+
             for (var i = 0; i < beepCount; i++)
             {
                 SystemSounds.Exclamation.Play();

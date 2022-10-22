@@ -101,27 +101,47 @@
             Header="预警设置"
             Icon="Alert24"
             Subtitle="关于发生时的预警设置">
-            <wpfui:CardControl
-                Title="追踪时间间隔"
-                Margin="0,12,0,0"
-                Icon="History24"
-                Subtitle="单位：0.1 秒  为了缓解源服务器压力，最低为 0.5 秒，请酌情设置">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock
-                        Grid.Column="0"
-                        Foreground="{DynamicResource TextFillColorPrimaryBrush}"
-                        Text="{Binding AlertSetting.Setting.TrackerTimeSpanMillisecond, Mode=OneWay}" />
-                    <Slider
-                        Grid.Column="1"
-                        Maximum="50"
-                        Minimum="5"
-                        Value="{Binding AlertSetting.Setting.TrackerTimeSpanMillisecond, Mode=TwoWay}" />
-                </Grid>
-            </wpfui:CardControl>
+            <StackPanel Orientation="Vertical">
+                <wpfui:CardControl
+                    Title="追踪时间间隔"
+                    Margin="0,12,0,0"
+                    Icon="History24"
+                    Subtitle="单位：0.1 秒  为了缓解源服务器压力，最低为 0.5 秒，请酌情设置">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+                            Text="{Binding TrackerSetting.Setting.TrackerTimeSpanMillisecond, Mode=OneWay}" />
+                        <Slider
+                            Grid.Column="1"
+                            Maximum="50"
+                            Minimum="5"
+                            Value="{Binding TrackerSetting.Setting.TrackerTimeSpanMillisecond, Mode=TwoWay}" />
+                    </Grid>
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Title="播报实时烈度说明"
+                    Margin="0,12,0,0"
+                    Subtitle="会播报对应烈度的信息">
+                    <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastLiveIntensity, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Title="播报强震求生说明"
+                    Margin="0,12,0,0"
+                    Subtitle="会播报烈度大于 3 时的简短求生说明">
+                    <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastLiveTips, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Title="播报地震基本信息说明"
+                    Margin="0,12,0,0"
+                    Subtitle="会在发震时播报基本发震信息">
+                    <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastEarthQuakeInformation, Mode=TwoWay}" />
+                </wpfui:CardControl>
+            </StackPanel>
         </wpfui:CardExpander>
         <wpfui:CardControl
             Title="开机启动"
@@ -138,7 +158,7 @@
             Margin="0,12,0,0"
             Icon="ContractDownLeft24"
             Subtitle="是否显示通知区域(托盘)图标, 如果不生效请尝试点击下方 退出程序 后重启应用">
-            <wpfui:ToggleSwitch x:Name="ShowNotifyIcon" IsChecked="{Binding UpdateSetting.Setting.ShowNotifyIcon}" />
+            <wpfui:ToggleSwitch x:Name="ShowNotifyIcon" IsChecked="{Binding UpdateSetting.Setting.ShowNotifyIcon, Mode=TwoWay}" />
         </wpfui:CardControl>
         <wpfui:CardControl
             Title="关闭服务"
