@@ -21,6 +21,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
     private readonly IEarthQuakeCalculator _earthQuakeCalculator;
     private readonly ISetting<CurrentPosition> _currentPosition;
     private readonly ISetting<AlertLimit> _alertLimit;
+    private readonly ISetting<TrackerSetting> _trackerSetting;
     private readonly ILogger<EarthQuakeTracker> _logger;
     private readonly IServiceProvider _service;
 
@@ -32,7 +33,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
 
     public EarthQuakeTracker(IEarthQuakeApi earthQuakeApi, IEarthQuakeCalculator earthQuakeCalculator,
         ISetting<CurrentPosition> currentPosition, ILogger<EarthQuakeTracker> logger, ISetting<AlertLimit> alertLimit,
-        IServiceProvider service)
+        IServiceProvider service, ISetting<TrackerSetting> trackerSetting)
     {
         _earthQuakeApi = earthQuakeApi;
         _earthQuakeCalculator = earthQuakeCalculator;
@@ -40,6 +41,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         _logger = logger;
         _alertLimit = alertLimit;
         _service = service;
+        _trackerSetting = trackerSetting;
     }
 
     public TimeSpan SimulateTimeSpan { get; set; } = TimeSpan.Zero;
@@ -52,7 +54,8 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         while (!cancellationTokenSource.Token.IsCancellationRequested)
         {
             await CheckEarthQuake(huaniaEarthQuake).ConfigureAwait(false);
-            await Task.Delay(500, _cancellationToken).ConfigureAwait(false);
+            await Task.Delay(_trackerSetting?.Setting?.TrackerTimeSpanMillisecond * 100 ?? 500, _cancellationToken)
+                .ConfigureAwait(false);
         }
     }
 
@@ -74,11 +77,11 @@ public class EarthQuakeTracker : IEarthQuakeTracker
             _logger.LogWarning("Simulating with simulatingInfo");
             var simulatingInfo = infos.FirstOrDefault(t => t.UpdateAt > DateTime.Now - SimulateTimeSpan);
             if (infos.Count <= 0 && simulatingInfo == null) return;
-            if (simulatingInfo == null) simulatingInfo = infos[^1];
+            simulatingInfo ??= infos[^1];
             latestInfo = simulatingInfo;
         }
 
-        if ((DateTime.Now - SimulateTimeSpan - latestInfo.UpdateAt).TotalSeconds >
+        if ((DateTime.Now - SimulateTimeSpan - latestInfo.StartAt).TotalSeconds >
             _trackingInformation.TheoryCountDown + 30)
         {
             _logger.LogInformation("Earthquake Expired for {Time} but theory {Theory} Quitting.",

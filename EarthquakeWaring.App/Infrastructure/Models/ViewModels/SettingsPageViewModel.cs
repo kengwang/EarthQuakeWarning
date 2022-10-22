@@ -9,6 +9,7 @@ public class SettingsPageViewModel
     public ISetting<CurrentPosition>? CurrentPosition { get; set; }
     public ISetting<AlertLimit>? AlertLimit { get; set; }
     public ISetting<UpdaterSetting>? UpdateSetting { get; set; }
+    public ISetting<TrackerSetting>? AlertSetting { get; set; }
 
     public string? Version => Assembly.GetExecutingAssembly().GetName().Version?.ToString();
 
