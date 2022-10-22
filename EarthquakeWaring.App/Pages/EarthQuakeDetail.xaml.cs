@@ -24,10 +24,10 @@ public partial class EarthQuakeDetail : Page
     private void MapView_OnNavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)
     {
         MapView.ExecuteScriptAsync(@"
-document.getElementById('search').style.display = 'none'
+//document.getElementById('search').style.display = 'none'
 document.getElementById('loginbox').style.display = 'none'
 document.getElementById('amapAppDownload').style.display = 'none'
-document.getElementById('layerbox_item').style.display = 'none'
+//document.getElementById('layerbox_item').style.display = 'none'
 document.getElementsByClassName('satellite')[0].click()
 document.getElementById('amap-result-banner').style.display = 'none'
 ");
