@@ -14,10 +14,11 @@ public class SettingsPageViewModel
     public string? Version => Assembly.GetExecutingAssembly().GetName().Version?.ToString();
 
     public SettingsPageViewModel(ISetting<CurrentPosition> currentPosition, ISetting<AlertLimit> alertLimit,
-        ISetting<UpdaterSetting>? updateSetting)
+        ISetting<UpdaterSetting>? updateSetting, ISetting<TrackerSetting>? trackerSetting)
     {
         CurrentPosition = currentPosition;
         AlertLimit = alertLimit;
         UpdateSetting = updateSetting;
+        TrackerSetting = trackerSetting;
     }
 }

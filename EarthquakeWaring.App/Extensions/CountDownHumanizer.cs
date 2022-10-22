@@ -13,7 +13,7 @@ public class CountDownHumanizer : IValueConverter
             int countDown => countDown > 0 ? countDown.ToString() : $"到达 {Math.Abs(countDown)} 秒",
             double countDownDouble => countDownDouble > 0
                 ? countDownDouble.ToString("F1")
-                : $"到达 {Math.Abs(countDownDouble):F1} 秒",
+                : $"到 {Math.Abs(countDownDouble):F1} 秒",
             _ => "未知"
         };
     }

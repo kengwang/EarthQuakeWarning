@@ -7,10 +7,17 @@ namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 
 public class TrackerSetting : INotificationOption
 {
-    private int _trackerTimeSpanMillisecond;
-    private bool _broadcastEarthQuakeInformation;
+    private int _trackerTimeSpanMillisecond = 5;
+    private bool _broadcastEarthQuakeInformation = true;
     private bool _broadcastLiveIntensity;
     private bool _broadcastLiveTips;
+    private bool _broadcastCountDown = true;
+
+    public bool BroadcastCountDown
+    {
+        get => _broadcastCountDown;
+        set => SetField(ref _broadcastCountDown, value);
+    }
 
     public int TrackerTimeSpanMillisecond
     {

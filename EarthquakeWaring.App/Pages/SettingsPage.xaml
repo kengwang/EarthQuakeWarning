@@ -105,7 +105,6 @@
                 <wpfui:CardControl
                     Title="追踪时间间隔"
                     Margin="0,12,0,0"
-                    Icon="History24"
                     Subtitle="单位：0.1 秒  为了缓解源服务器压力，最低为 0.5 秒，请酌情设置">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -140,6 +139,12 @@
                     Margin="0,12,0,0"
                     Subtitle="会在发震时播报基本发震信息">
                     <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastEarthQuakeInformation, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Title="播报倒计时"
+                    Margin="0,12,0,0"
+                    Subtitle="会播报地震的倒计时">
+                    <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastCountDown, Mode=TwoWay}" />
                 </wpfui:CardControl>
             </StackPanel>
         </wpfui:CardExpander>

@@ -23,8 +23,10 @@ public partial class EarlyWarningWindow : Window
     private readonly SpeechSynthesizer _speech;
     private readonly IntensityDescriptor _intensityDescriptor = new();
     private readonly ISetting<TrackerSetting> _trackerSetting;
-    private string lastDescription = null!;
+    private string _lastDescription = null!;
     private Prompt? _lastPrompt;
+    private SpeechSynthesizer? intensitySpeech;
+    private SpeechSynthesizer? tipSpeech;
 
     public EarlyWarningWindow(EarthQuakeTrackingInformation information, IServiceProvider service)
     {
@@ -36,13 +38,30 @@ public partial class EarlyWarningWindow : Window
         _speech = new SpeechSynthesizer();
         _speech.SelectVoice(_speech.GetInstalledVoices(CultureInfo.InstalledUICulture)[0].VoiceInfo.Name);
         _speech.SetOutputToDefaultAudioDevice();
-        var basicInfoSpeech = new SpeechSynthesizer();
-        basicInfoSpeech.SelectVoice(_speech.GetInstalledVoices(CultureInfo.InstalledUICulture)[0].VoiceInfo.Name);
-        basicInfoSpeech.SetOutputToDefaultAudioDevice();
+        if (_trackerSetting.Setting?.BroadcastLiveIntensity is true)
+        {
+            intensitySpeech = new SpeechSynthesizer();
+            intensitySpeech.SelectVoice(_speech.GetInstalledVoices(CultureInfo.InstalledUICulture)[0].VoiceInfo.Name);
+            intensitySpeech.SetOutputToDefaultAudioDevice();
+        }
+
+        if (_trackerSetting.Setting?.BroadcastLiveTips is true)
+        {
+            tipSpeech = new SpeechSynthesizer();
+            tipSpeech.SelectVoice(_speech.GetInstalledVoices(CultureInfo.InstalledUICulture)[0].VoiceInfo.Name);
+            tipSpeech.SetOutputToDefaultAudioDevice();
+        }
+
         if (_trackerSetting.Setting?.BroadcastEarthQuakeInformation is true)
+        {
+            var basicInfoSpeech = new SpeechSynthesizer();
+            basicInfoSpeech.SelectVoice(_speech.GetInstalledVoices(CultureInfo.InstalledUICulture)[0].VoiceInfo.Name);
+            basicInfoSpeech.SetOutputToDefaultAudioDevice();
             basicInfoSpeech.SpeakAsync(
                 $"{information.Position} 发生地震，震级 {information.Magnitude:F1} 级" +
                 _intensityDescriptor.Convert(_information.Intensity, typeof(string), null!, null!));
+        }
+
         _information.PropertyChanged += InformationOnPropertyChanged;
     }
 
@@ -59,7 +78,7 @@ public partial class EarlyWarningWindow : Window
         Run(async () =>
         {
             if (_lastPrompt != null) _speech.SpeakAsyncCancel(_lastPrompt);
-            if (_information.CountDown <= 0)
+            if (_information.CountDown <= 0 && _trackerSetting.Setting?.BroadcastCountDown is true)
             {
                 _information.PropertyChanged -= InformationOnPropertyChanged;
                 _speech.SpeakAsync("地震波已到达，" +
@@ -68,8 +87,12 @@ public partial class EarlyWarningWindow : Window
                 return;
             }
 
-            _lastPrompt = new Prompt(_information.CountDown.ToString());
-            _speech.SpeakAsync(_lastPrompt);
+            if (_trackerSetting.Setting?.BroadcastCountDown is true)
+            {
+                _lastPrompt = new Prompt(_information.CountDown.ToString());
+                _speech.SpeakAsync(_lastPrompt);
+            }
+
             var beepCount = _information.Stage switch
             {
                 EarthQuakeStage.Emergency => 1,
@@ -81,22 +104,22 @@ public partial class EarlyWarningWindow : Window
                 var currentIntensityDescription =
                     _intensityDescriptor.Convert(_information.Intensity, typeof(string), null!, null!) as string ??
                     "未知";
-                if (currentIntensityDescription != lastDescription)
+                if (currentIntensityDescription != _lastDescription)
                 {
-                    lastDescription = currentIntensityDescription;
-                    _speech.SpeakAsync(new Prompt(lastDescription));
+                    _lastDescription = currentIntensityDescription;
+                    intensitySpeech?.SpeakAsync(new Prompt(_lastDescription));
                 }
             }
 
-            if (_trackerSetting.Setting?.BroadcastLiveTips is true)
+            if (_trackerSetting.Setting?.BroadcastLiveTips is true && _information.CountDown % 5 == 0)
             {
                 switch (_information.Intensity)
                 {
-                    case >= 4 and <= 5:
-                        _speech.SpeakAsync(new Prompt("躲避悬挂"));
+                    case >= 3 and <= 4:
+                        tipSpeech?.SpeakAsync(new Prompt("躲避悬挂"));
                         break;
-                    case > 5:
-                        _speech.SpeakAsync(new Prompt("迅速逃生"));
+                    case > 4:
+                        tipSpeech?.SpeakAsync(new Prompt("迅速逃生"));
                         break;
                 }
             }
