@@ -25,6 +25,7 @@ API / 计算数据 自：[成都高新减灾研究所](http://www.365icl.com/) /
 * serilog/serilog: [https://github.com/serilog/serilog](https://github.com/serilog/serilog)
 * microsoft/webview2: [https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/](https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/)
 * 高德地图 Uri Api: [https://lbs.amap.com/api/uri-api](https://lbs.amap.com/api/uri-api)
+* 百度坐标拾取系统: [https://api.map.baidu.com/lbsapi/getpoint/](https://api.map.baidu.com/lbsapi/getpoint/)
 
 如果此软件侵犯了您的权益，请发 Issue 或 联系我 [hi@kengwang.com.cn](mailto:hi@kengwang.com.cn)
 
