@@ -11,17 +11,10 @@ namespace EarthquakeWaring.App.Services
         {
             using (var deviceEnumerator = new MMDeviceEnumerator())
             {
-                IList<MMDevice> outputDevices = deviceEnumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active).ToList();
-                if (outputDevices.Count() > 0)
+                using (var device = deviceEnumerator.GetDefaultAudioEndpoint(DataFlow.Render, Role.Multimedia))
                 {
-                    foreach (var device in outputDevices)
-                    {
-                        using (device)
-                        {
-                            device.AudioEndpointVolume.Mute = false;
-                            device.AudioEndpointVolume.MasterVolumeLevelScalar = 1;
-                        }
-                    }
+                    device.AudioEndpointVolume.Mute = false;
+                    device.AudioEndpointVolume.MasterVolumeLevelScalar = 1;
                 }
             }
         }
