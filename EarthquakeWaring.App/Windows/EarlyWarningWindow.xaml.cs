@@ -27,14 +27,17 @@ public partial class EarlyWarningWindow : Window
     private Prompt? _lastPrompt;
     private SpeechSynthesizer? intensitySpeech;
     private SpeechSynthesizer? tipSpeech;
+    private IVolumeManager? _volumeManager;
 
     public EarlyWarningWindow(EarthQuakeTrackingInformation information, IServiceProvider service)
     {
         _information = information;
         _service = service;
         _trackerSetting = _service.GetRequiredService<ISetting<TrackerSetting>>();
+        _volumeManager = _service.GetRequiredService<IVolumeManager>();
         DataContext = information;
         InitializeComponent();
+        _volumeManager?.SetVolumeToMax();
         _speech = new SpeechSynthesizer();
         _speech.SelectVoice(_speech.GetInstalledVoices(CultureInfo.InstalledUICulture)[0].VoiceInfo.Name);
         _speech.SetOutputToDefaultAudioDevice();

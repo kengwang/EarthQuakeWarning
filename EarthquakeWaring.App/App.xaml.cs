@@ -96,6 +96,7 @@ namespace EarthquakeWaring.App
             service.AddSingleton<ITrayIconHolder, TrayIconHolder>();
 
             service.AddHostedService<HeartBeatBackgroundService>();
+            service.AddSingleton<IVolumeManager,VolumeManager>();
         }
     }
 }
