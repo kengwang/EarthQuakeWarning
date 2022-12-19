@@ -12,7 +12,7 @@ using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Services;
 using EarthquakeWaring.App.Windows;
 using Microsoft.Extensions.DependencyInjection;
-using Button = WPFUI.Controls.Button;
+using Button = Wpf.Ui.Controls.Button;
 
 namespace EarthquakeWaring.App.Pages;
 

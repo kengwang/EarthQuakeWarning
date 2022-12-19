@@ -22,64 +22,94 @@
         IsVirtualizing="True"
         VirtualizationMode="Recycling">
         <wpfui:CardExpander
-            Header="我的位置"
-            Icon="Map24"
-            Subtitle="请手动输入您的经纬度坐标">
-            <wpfui:CardExpander.HeaderContent>
-                <wpfui:Button Click="OpenPositionSelector" Content="打开 坐标拾取器" />
-            </wpfui:CardExpander.HeaderContent>
+            Icon="Map24">
+            <wpfui:CardExpander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                        <TextBlock Text="我的位置" FontWeight="Bold"/>
+                        <TextBlock Text="请手动输入您的经纬度坐标" FontWeight="Light"/>
+                    </StackPanel>
+                    <wpfui:Button Click="OpenPositionSelector" Content="打开 坐标拾取器" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </wpfui:CardExpander.Header>
             <StackPanel Orientation="Vertical">
-                <wpfui:CardControl
-                    Title="经度"
-                    Margin="0,8,0,0"
-                    Subtitle="坐标拾取器逗号前内容，包括小数点后">
+                <wpfui:CardControl Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="经度" FontWeight="Bold"/>
+                            <TextBlock Text="坐标拾取器逗号前内容，包括小数点后" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <TextBox Text="{Binding CurrentPosition.Setting.Longitude, Mode=TwoWay}" />
                 </wpfui:CardControl>
                 <wpfui:CardControl
-                    Title="纬度"
-                    Margin="0,8,0,0"
-                    Subtitle="坐标拾取器逗号后内容，包括小数点后">
+                    Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="纬度" FontWeight="Bold"/>
+                            <TextBlock Text="坐标拾取器逗号后内容，包括小数点后" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <TextBox Text="{Binding CurrentPosition.Setting.Latitude, Mode=TwoWay}" />
                 </wpfui:CardControl>
             </StackPanel>
         </wpfui:CardExpander>
         <wpfui:CardExpander
-            Margin="0,12,0,0"
-            Header="警报阈值"
-            Icon="Alert24"
-            Subtitle="请手动输入警报阈值">
+            Margin="0,12,0,0" Icon="Alert24">
+            <wpfui:CardExpander.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="警报阈值" FontWeight="Bold"/>
+                    <TextBlock Text="请手动输入警报阈值" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardExpander.Header>
             <StackPanel Orientation="Vertical">
-                <wpfui:CardControl
-                    Title="日间震级"
-                    Margin="0,8,0,0"
-                    Subtitle="7时 - 22时 震级大于等于此值才会显示警报">
+                <wpfui:CardControl Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="日间震级" FontWeight="Bold"/>
+                            <TextBlock Text="7时 - 22时 震级大于等于此值才会显示警报" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <TextBox Text="{Binding AlertLimit.Setting.DayMagnitude, Mode=TwoWay}" />
                 </wpfui:CardControl>
-                <wpfui:CardControl
-                    Title="日间烈度"
-                    Margin="0,8,0,0"
-                    Subtitle="7时 - 22时 烈度大于等于此值将会显示警报">
+                <wpfui:CardControl Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="日间烈度" FontWeight="Bold"/>
+                            <TextBlock Text="7时 - 22时 烈度大于等于此值将会显示警报" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <TextBox Text="{Binding AlertLimit.Setting.DayIntensity, Mode=TwoWay}" />
                 </wpfui:CardControl>
-                <wpfui:CardControl
-                    Title="夜间震级"
-                    Margin="0,8,0,0"
-                    Subtitle="23时 - 明日 6时 震级大于等于此值才会显示警报">
+                <wpfui:CardControl Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="夜间震级" FontWeight="Bold"/>
+                            <TextBlock Text="23时 - 明日 6时 震级大于等于此值才会显示警报" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <TextBox Text="{Binding AlertLimit.Setting.NightMagnitude, Mode=TwoWay}" />
                 </wpfui:CardControl>
-                <wpfui:CardControl
-                    Title="夜间烈度"
-                    Margin="0,8,0,0"
-                    Subtitle="23时 - 明日 6时 烈度大于等于此值将会显示警报">
+                <wpfui:CardControl Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="夜间烈度" FontWeight="Bold"/>
+                            <TextBlock Text="23时 - 明日 6时 烈度大于等于此值将会显示警报" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <TextBox Text="{Binding AlertLimit.Setting.NightIntensity, Mode=TwoWay}" />
                 </wpfui:CardControl>
             </StackPanel>
         </wpfui:CardExpander>
         <wpfui:CardControl
-            Title="检测时间间隔"
             Margin="0,12,0,0"
-            Icon="History24"
-            Subtitle="单位：秒  为了缓解源服务器压力，最低为 3 秒，请酌情设置">
+            Icon="History24">
+            <wpfui:CardControl.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="检测时间间隔" FontWeight="Bold"/>
+                    <TextBlock Text="单位：秒  为了缓解源服务器压力，最低为 3 秒，请酌情设置" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardControl.Header>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
@@ -98,14 +128,22 @@
         </wpfui:CardControl>
         <wpfui:CardExpander
             Margin="0,12,0,0"
-            Header="预警设置"
-            Icon="Alert24"
-            Subtitle="关于发生时的预警设置">
+            Icon="Alert24">
+            <wpfui:CardExpander.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="预警设置" FontWeight="Bold"/>
+                    <TextBlock Text="关于发生时的预警设置" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardExpander.Header>
             <StackPanel Orientation="Vertical">
                 <wpfui:CardControl
-                    Title="追踪时间间隔"
-                    Margin="0,12,0,0"
-                    Subtitle="单位：0.1 秒  为了缓解源服务器压力，最低为 0.5 秒，请酌情设置">
+                    Margin="0,12,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="追踪时间间隔" FontWeight="Bold"/>
+                            <TextBlock Text="单位：0.1 秒  为了缓解源服务器压力，最低为 0.5 秒，请酌情设置" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -123,76 +161,125 @@
                     </Grid>
                 </wpfui:CardControl>
                 <wpfui:CardControl
-                    Title="播报实时烈度说明"
-                    Margin="0,12,0,0"
-                    Subtitle="会播报对应烈度的信息">
+                    Margin="0,12,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="播报实时烈度说明" FontWeight="Bold"/>
+                            <TextBlock Text="会播报对应烈度的信息" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastLiveIntensity, Mode=TwoWay}" />
                 </wpfui:CardControl>
                 <wpfui:CardControl
-                    Title="播报强震求生说明"
-                    Margin="0,12,0,0"
-                    Subtitle="会播报烈度大于 3 时的简短求生说明">
+                    Margin="0,12,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="播报强震求生说明" FontWeight="Bold"/>
+                            <TextBlock Text="会播报烈度大于 3 时的简短求生说明" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastLiveTips, Mode=TwoWay}" />
                 </wpfui:CardControl>
                 <wpfui:CardControl
-                    Title="播报地震基本信息说明"
-                    Margin="0,12,0,0"
-                    Subtitle="会在发震时播报基本发震信息">
+                    Margin="0,12,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="播报地震基本信息说明" FontWeight="Bold"/>
+                            <TextBlock Text="会在发震时播报基本发震信息" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastEarthQuakeInformation, Mode=TwoWay}" />
                 </wpfui:CardControl>
                 <wpfui:CardControl
-                    Title="播报倒计时"
-                    Margin="0,12,0,0"
-                    Subtitle="会播报地震的倒计时">
+                    Margin="0,12,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="播报倒计时" FontWeight="Bold"/>
+                            <TextBlock Text="会播报地震的倒计时" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
                     <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.BroadcastCountDown, Mode=TwoWay}" />
                 </wpfui:CardControl>
             </StackPanel>
         </wpfui:CardExpander>
         <wpfui:CardControl
-            Title="开机启动"
             Margin="0,12,0,0"
-            Icon="ApprovalsApp20"
-            Subtitle="设置开机启动">
+            Icon="ApprovalsApp20">
+            <wpfui:CardControl.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="开机启动" FontWeight="Bold"/>
+                    <TextBlock Text="设置开机启动" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardControl.Header>
             <wpfui:ToggleSwitch
                 x:Name="StartupSwitch"
                 Checked="ToggleButton_OnChecked"
                 Unchecked="StartupSwitch_OnUnchecked" />
         </wpfui:CardControl>
         <wpfui:CardControl
-            Title="显示后台通知区域图标"
             Margin="0,12,0,0"
-            Icon="ContractDownLeft24"
-            Subtitle="是否显示通知区域(托盘)图标, 如果不生效请尝试点击下方 退出程序 后重启应用">
+            Icon="ContractDownLeft24">
+            <wpfui:CardControl.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="显示后台通知区域图标" FontWeight="Bold"/>
+                    <TextBlock Text="是否显示通知区域(托盘)图标, 如果不生效请尝试点击下方 退出程序 后重启应用" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardControl.Header>
             <wpfui:ToggleSwitch x:Name="ShowNotifyIcon" IsChecked="{Binding UpdateSetting.Setting.ShowNotifyIcon, Mode=TwoWay}" />
         </wpfui:CardControl>
         <wpfui:CardControl
-            Title="关闭服务"
             Margin="0,12,0,0"
             Click="CloseClick"
-            Icon="Power24"
-            Subtitle="关闭后台服务, 退出程序" />
+            Icon="Power24">
+            <wpfui:CardControl.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="关闭服务" FontWeight="Bold"/>
+                    <TextBlock Text="关闭后台服务, 退出程序" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardControl.Header>
+        </wpfui:CardControl>
         <wpfui:CardControl
-            Title="开发者"
             Margin="0,12,0,0"
             Click="DeveloperClicked"
-            Icon="Person24"
-            Subtitle="Kengwang" />
+            Icon="Person24">
+            <wpfui:CardControl.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="开发者" FontWeight="Bold"/>
+                    <TextBlock Text="Kengwang" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardControl.Header>
+        </wpfui:CardControl>
         <wpfui:CardControl
-            Title="EarthQuakeWarning 地震预警"
             Margin="0,12,0,0"
-            Icon="Warning24"
-            Subtitle="{Binding Version}" />
+            Icon="Warning24">
+            <wpfui:CardControl.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="EarthQuakeWarning 地震预警" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding Version}" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardControl.Header>
+        </wpfui:CardControl>
         <wpfui:CardControl
-            Title="开源地址"
             Margin="0,12,0,0"
             Click="OpenSourceClick"
-            Icon="Box24"
-            Subtitle="https://github.com/kengwang/EarthQuakeWarning" />
+            Icon="Box24">
+            <wpfui:CardControl.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="开源地址" FontWeight="Bold"/>
+                    <TextBlock Text="https://github.com/kengwang/EarthQuakeWarning" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardControl.Header>
+        </wpfui:CardControl>
         <wpfui:CardControl
-            Title="感谢"
             Margin="0,12,0,0"
             Click="ThanksClick"
-            Icon="Heart24"
-            Subtitle="成都高新减灾研究所 | 成都市美幻科技有限公司" />
+            Icon="Heart24">
+            <wpfui:CardControl.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="感谢" FontWeight="Bold"/>
+                    <TextBlock Text="成都高新减灾研究所 | 成都市美幻科技有限公司" FontWeight="Light"/>
+                </StackPanel>
+            </wpfui:CardControl.Header>
+        </wpfui:CardControl>
     </VirtualizingStackPanel>
 </Page>

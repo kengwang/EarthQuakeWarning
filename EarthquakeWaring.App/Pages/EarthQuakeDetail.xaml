@@ -36,20 +36,70 @@
                 <ColumnDefinition />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <wpfui:CardControl Title="{Binding Position}" Subtitle="震中位置" Grid.Row="0" Grid.Column="0" />
-            <wpfui:CardControl Title="{Binding Magnitude,Converter={StaticResource DoubleLimiter}}" Subtitle="预警震级"
-                               Grid.Row="0" Grid.Column="1" />
-            <wpfui:CardControl Title="{Binding StartTime,Converter={StaticResource DateTimeHumanizer}}" Subtitle="发震时刻"
-                               Grid.Row="1" Grid.Column="0" />
-            <wpfui:CardControl Title="{Binding .,Converter={StaticResource PositionHumanizer}}" Subtitle="震中经纬"
-                               Grid.Row="1" Grid.Column="1" />
-            <wpfui:CardControl Title="{Binding Depth,Converter={StaticResource DoubleLimiter}}" Subtitle="震源深度"
-                               Grid.Row="2" Grid.Column="0" />
-            <wpfui:CardControl Title="{Binding Distance,Converter={StaticResource DoubleLimiter}}" Subtitle="震中距离 (公里)"
-                               Grid.Row="2" Grid.Column="1" />
-            <wpfui:CardControl Title="{Binding Intensity,Converter={StaticResource DoubleLimiter}}" Subtitle="预估烈度"
-                               Grid.Row="3" Grid.Column="0" />
-            <wpfui:CardControl Title="{Binding TheoryCountDown}" Subtitle="预警时间" Grid.Row="3" Grid.Column="1" />
+            <wpfui:CardControl Grid.Row="0" Grid.Column="0" >
+                <wpfui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text ="{Binding Position}" FontWeight="Bold"/>
+                        <TextBlock Text ="震中位置" FontWeight="Light"/>
+                    </StackPanel>
+                </wpfui:CardControl.Header>
+            </wpfui:CardControl>
+            <wpfui:CardControl Grid.Row="0" Grid.Column="1" >
+                <wpfui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text ="{Binding Magnitude,Converter={StaticResource DoubleLimiter}}" FontWeight="Bold"/>
+                        <TextBlock Text ="预警震级" FontWeight="Light"/>
+                    </StackPanel>
+                </wpfui:CardControl.Header>
+            </wpfui:CardControl>
+            <wpfui:CardControl Grid.Row="1" Grid.Column="0" >
+                <wpfui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text ="{Binding StartTime,Converter={StaticResource DateTimeHumanizer}}" FontWeight="Bold"/>
+                        <TextBlock Text ="发震时刻" FontWeight="Light"/>
+                </StackPanel>
+                </wpfui:CardControl.Header>
+            </wpfui:CardControl>
+            <wpfui:CardControl Grid.Row="1" Grid.Column="1" >
+                <wpfui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text ="{Binding .,Converter={StaticResource PositionHumanizer}}" FontWeight="Bold"/>
+                        <TextBlock Text ="震中经纬" FontWeight="Light"/>
+                    </StackPanel>
+                </wpfui:CardControl.Header>
+            </wpfui:CardControl>
+            <wpfui:CardControl Grid.Row="2" Grid.Column="0" >
+                <wpfui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text ="{Binding Depth,Converter={StaticResource DoubleLimiter}}" FontWeight="Bold"/>
+                        <TextBlock Text ="震源深度" FontWeight="Light"/>
+                    </StackPanel>
+                </wpfui:CardControl.Header>
+            </wpfui:CardControl>
+            <wpfui:CardControl Grid.Row="2" Grid.Column="1" >
+                <wpfui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text ="{Binding Distance,Converter={StaticResource DoubleLimiter}}" FontWeight="Bold"/>
+                        <TextBlock Text ="震中距离 (公里)" FontWeight="Light"/>
+                    </StackPanel>
+                </wpfui:CardControl.Header>
+            </wpfui:CardControl>
+            <wpfui:CardControl Grid.Row="3" Grid.Column="0" >
+                <wpfui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text ="{Binding Intensity,Converter={StaticResource DoubleLimiter}}" FontWeight="Bold"/>
+                        <TextBlock Text ="预估烈度" FontWeight="Light"/>
+                    </StackPanel>
+                </wpfui:CardControl.Header>
+            </wpfui:CardControl>
+            <wpfui:CardControl Grid.Row="3" Grid.Column="1" >
+                <wpfui:CardControl.Header>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock Text ="{Binding TheoryCountDown}" FontWeight="Bold"/>
+                        <TextBlock Text ="预警时间" FontWeight="Light"/>
+                    </StackPanel>
+                </wpfui:CardControl.Header>
+            </wpfui:CardControl>
 
         </Grid>
     </Grid>
