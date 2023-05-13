@@ -15,7 +15,7 @@ public class HuaniaEarthQuakeApi : IEarthQuakeApi
     private readonly IHttpRequester _httpRequester;
     private readonly IJsonConvertService _jsonConvert;
     private readonly ILogger<HuaniaEarthQuakeApi> _logger;
-    private const string HuaniaApi = "https://mobile.chinaeew.cn/v1/";
+    private const string HuaniaApi = "https://mobile-new.chinaeew.cn/v1/";
 
     public HuaniaEarthQuakeApi(IHttpRequester httpRequester, IJsonConvertService jsonConvert,
         ILogger<HuaniaEarthQuakeApi> logger)
