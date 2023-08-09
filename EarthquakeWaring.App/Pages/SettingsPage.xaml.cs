@@ -4,9 +4,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using EarthquakeWaring.App.Infrastructure.Models;
+using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Windows;
+using GuerrillaNtp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
@@ -69,5 +71,27 @@ public partial class SettingsPage : Page
     {
         _lifetime.StopApplication();
         Application.Current.Shutdown();
+    }
+    public async void TestNTPServer(object sender, RoutedEventArgs e) 
+    {
+        var setting = _services.GetService<ISetting<TimeSetting>>();
+        var server = setting?.Setting?.NTPServer;
+        var client = new NtpClient(server,TimeSpan.FromMilliseconds(500));
+        try
+        {
+            var result = await client.QueryAsync();
+            if (result.Synchronized) 
+            {
+                MessageBox.Show("NTP服务器状态正常");
+            }
+            else
+            {
+                MessageBox.Show("NTP服务器状态异常");
+            }
+        }
+        catch 
+        {
+            MessageBox.Show("NTP服务器状态异常");
+        }
     }
 }

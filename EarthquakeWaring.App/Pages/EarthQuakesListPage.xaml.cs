@@ -87,7 +87,8 @@ public partial class EarthQuakesListPage : Page
         var cancellationTokenSource = new CancellationTokenSource();
         var info = (((sender as Button)?.Tag as EarthQuakeTrackingInformation)!);
         var tracker = _service.GetService<IEarthQuakeTracker>();
-        tracker!.SimulateTimeSpan = DateTime.Now - info.StartTime;
+        var ntpClient = _service.GetService<INTPHandler>();
+        tracker!.SimulateTimeSpan = DateTime.Now + ntpClient!.Offset - info.StartTime;
         tracker!.SimulateUpdates = await _quakeApi.GetEarthQuakeInfo(info.EventId, cancellationTokenSource.Token);
         tracker?.StartTrack(new HuaniaEarthQuake()
         {

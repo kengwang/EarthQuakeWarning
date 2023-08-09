@@ -11,6 +11,7 @@ using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Windows;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace EarthquakeWaring.App.Services;
@@ -68,6 +69,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                     await _earthQuakeApi.GetEarthQuakeInfo(huaniaEarthQuake.EventId,
                         _cancellationToken);
         EarthQuakeUpdate latestInfo;
+        var ntpClient = _service.GetService<INTPHandler>();
         if (SimulateTimeSpan == TimeSpan.Zero)
         {
             latestInfo = infos[^1];
@@ -75,17 +77,17 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         else
         {
             _logger.LogWarning("Simulating with simulatingInfo");
-            var simulatingInfo = infos.FirstOrDefault(t => t.UpdateAt > DateTime.Now - SimulateTimeSpan);
+            var simulatingInfo = infos.FirstOrDefault(t => t.UpdateAt > DateTime.Now + ntpClient!.Offset - SimulateTimeSpan);
             if (infos.Count <= 0 && simulatingInfo == null) return;
             simulatingInfo ??= infos[^1];
             latestInfo = simulatingInfo;
         }
 
-        if ((DateTime.Now - SimulateTimeSpan - latestInfo.StartAt).TotalSeconds >
+        if ((DateTime.Now + ntpClient!.Offset - SimulateTimeSpan - latestInfo.StartAt).TotalSeconds >
             _trackingInformation.TheoryCountDown + 30)
         {
             _logger.LogInformation("Earthquake Expired for {Time} but theory {Theory} Quitting.",
-                (DateTime.Now - SimulateTimeSpan - latestInfo.UpdateAt).TotalSeconds,
+                (DateTime.Now + ntpClient!.Offset - SimulateTimeSpan - latestInfo.UpdateAt).TotalSeconds,
                 _trackingInformation.TheoryCountDown + 30);
             _tokenSource?.Cancel(); // Expired Information
             return;
