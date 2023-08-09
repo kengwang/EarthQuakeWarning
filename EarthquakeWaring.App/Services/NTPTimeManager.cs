@@ -45,10 +45,15 @@ namespace EarthquakeWaring.App.Services
                     }
                     return true;
                 }
+                else
+                {
+                    _offset = TimeSpan.Zero;
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex,$"Query Failed. NTP Server Is {NTPServer}");
+                _offset = TimeSpan.Zero;
                 return false;
             }
             return false;
