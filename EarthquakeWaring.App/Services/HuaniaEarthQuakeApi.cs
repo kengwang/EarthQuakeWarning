@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using EarthquakeWaring.App.Infrastructure.Models;
-using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
+﻿using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EarthquakeWaring.App.Services;
 
@@ -38,7 +37,7 @@ public class HuaniaEarthQuakeApi : IEarthQuakeApi
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"Error while calling Huania Api");
+            _logger.LogError(e, "Error while calling Huania Api");
         }
 
         return new List<HuaniaEarthQuake>();
@@ -49,7 +48,7 @@ public class HuaniaEarthQuakeApi : IEarthQuakeApi
         try
         {
             var response = _jsonConvert.ConvertTo<HuaniaEarthQuakeInfoResponse>(
-                await _httpRequester.GetString(HuaniaApi + "earlywarnings/"+earthQuakeId, null,
+                await _httpRequester.GetString(HuaniaApi + "earlywarnings/" + earthQuakeId, null,
                     cancellationToken));
             if (response?.Code != 0)
                 throw new Exception(response?.Message);
@@ -57,7 +56,7 @@ public class HuaniaEarthQuakeApi : IEarthQuakeApi
         }
         catch (Exception e)
         {
-            _logger.LogError(e,"Error while calling Huania Api");
+            _logger.LogError(e, "Error while calling Huania Api");
         }
         return new List<EarthQuakeUpdate>();
     }

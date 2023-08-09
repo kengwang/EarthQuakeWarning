@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
+using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
+using Microsoft.Extensions.Hosting;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using EarthquakeWaring.App.Infrastructure.Models;
-using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
-using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
-using GuerrillaNtp;
-using Microsoft.Extensions.Hosting;
 
 namespace EarthquakeWaring.App.Services;
 

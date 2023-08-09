@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
-using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 
 namespace EarthquakeWaring.App.Services;
 
@@ -27,7 +26,7 @@ public class HttpRequester : IHttpRequester
         responseMessage.EnsureSuccessStatusCode();
         return await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
     }
-    
+
 
     public async Task<string> PostString(string url, HttpContent content, CancellationToken cancellationToken)
     {

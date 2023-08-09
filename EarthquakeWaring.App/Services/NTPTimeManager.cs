@@ -3,10 +3,7 @@ using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using GuerrillaNtp;
 using Microsoft.Extensions.Logging;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Principal;
-using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Vanara.PInvoke;
@@ -16,13 +13,15 @@ namespace EarthquakeWaring.App.Services
     public class NTPTimeManager : INTPHandler
     {
         public TimeSpan Offset => _offset;
-        private  TimeSpan _offset = TimeSpan.Zero;
+        private TimeSpan _offset = TimeSpan.Zero;
         private ISetting<TimeSetting> _setting;
         private ILogger<NTPTimeManager> _logger;
         private Timer _timer;
         private NtpClient _ntpClient;
 
-        public string NTPServer { get;}
+        public string NTPServer { get; }
+        public DateTime LastUpdated => _lastUpdated;
+        public DateTime _lastUpdated = DateTime.MinValue;
         public void GetNTPServerTime(object? sender, ElapsedEventArgs e)
         {
             _ = GetNTPServerTime();
@@ -32,17 +31,18 @@ namespace EarthquakeWaring.App.Services
             try
             {
                 var result = await _ntpClient.QueryAsync();
-                if(result.Synchronized)
+                if (result.Synchronized)
                 {
                     if (_setting.Setting?.SetNTPTimeToMachine ?? false != true)
                     {
-                        _offset = result.CorrectionOffset;                       
+                        _offset = result.CorrectionOffset;
                     }
                     else
                     {
                         var sysTimeResult = TrySetSystemTime(result.Now.LocalDateTime);
                         if (!sysTimeResult) _offset = result.CorrectionOffset;
                     }
+                    _lastUpdated = result.Now.LocalDateTime;
                     return true;
                 }
                 else
@@ -52,7 +52,7 @@ namespace EarthquakeWaring.App.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex,$"Query Failed. NTP Server Is {NTPServer}");
+                _logger.LogError(ex, $"Query Failed. NTP Server Is {NTPServer}");
                 _offset = TimeSpan.Zero;
                 return false;
             }
@@ -66,7 +66,7 @@ namespace EarthquakeWaring.App.Services
                 WindowsIdentity identity = WindowsIdentity.GetCurrent();
                 WindowsPrincipal principal = new WindowsPrincipal(identity);
                 bool isAdmin = principal.IsInRole(WindowsBuiltInRole.Administrator);
-                if(isAdmin)
+                if (isAdmin)
                 {
                     var systemTime = new SYSTEMTIME()
                     {
@@ -101,7 +101,7 @@ namespace EarthquakeWaring.App.Services
             _timer = new Timer(interval.TotalMilliseconds);
             _timer.AutoReset = true;
             _timer.Elapsed += GetNTPServerTime;
-            _timer.Start();            
+            _timer.Start();
         }
     }
 }

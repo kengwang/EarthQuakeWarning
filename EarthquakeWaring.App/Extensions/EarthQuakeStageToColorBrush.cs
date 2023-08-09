@@ -1,9 +1,8 @@
-﻿using System;
+﻿using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+using System;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using EarthquakeWaring.App.Infrastructure.Models;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 
 namespace EarthquakeWaring.App.Extensions;
 

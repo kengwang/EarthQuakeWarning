@@ -1,9 +1,8 @@
-﻿using System;
+﻿using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using EarthquakeWaring.App.Infrastructure.Models;
-using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 
 namespace EarthquakeWaring.App.Services;
 

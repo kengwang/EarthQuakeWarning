@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 
 namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using EarthquakeWaring.App.Infrastructure.Models;
-using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
+﻿using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
-using EarthquakeWaring.App.Windows;
 using GuerrillaNtp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
+using System;
+using System.Diagnostics;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace EarthquakeWaring.App.Pages;
 
@@ -27,7 +24,7 @@ public partial class SettingsPage : Page
         _lifetime = lifetime;
         InitializeComponent();
         DataContext = vm;
-        dontFire= true;
+        dontFire = true;
         StartupSwitch.IsChecked =
             Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\")?.GetValue(nameof(EarthquakeWaring)) != null;
         dontFire = false;
@@ -57,7 +54,7 @@ public partial class SettingsPage : Page
         Process.Start("explorer.exe", "https://github.com/kengwang");
     }
 
-    private void OpenSourceClick(object sender, RoutedEventArgs e)  
+    private void OpenSourceClick(object sender, RoutedEventArgs e)
     {
         Process.Start("explorer.exe", "https://github.com/kengwang/EarthQuakeWarning");
     }
@@ -72,15 +69,15 @@ public partial class SettingsPage : Page
         _lifetime.StopApplication();
         Application.Current.Shutdown();
     }
-    public async void TestNTPServer(object sender, RoutedEventArgs e) 
+    public async void TestNTPServer(object sender, RoutedEventArgs e)
     {
         var setting = _services.GetService<ISetting<TimeSetting>>();
         var server = setting?.Setting?.NTPServer;
-        var client = new NtpClient(server,TimeSpan.FromMilliseconds(500));
+        var client = new NtpClient(server, TimeSpan.FromMilliseconds(500));
         try
         {
             var result = await client.QueryAsync();
-            if (result.Synchronized) 
+            if (result.Synchronized)
             {
                 MessageBox.Show("NTP服务器状态正常");
             }
@@ -89,7 +86,7 @@ public partial class SettingsPage : Page
                 MessageBox.Show("NTP服务器状态异常");
             }
         }
-        catch 
+        catch
         {
             MessageBox.Show("NTP服务器状态异常");
         }

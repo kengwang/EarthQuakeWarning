@@ -91,6 +91,13 @@
                     <wpfui:ToggleSwitch IsChecked="{Binding TimeSetting.Setting.SetNTPTimeToMachine, Mode=TwoWay}"
                                         HorizontalAlignment="Right"/>
                 </wpfui:CardControl>
+                <TextBlock>
+                    <TextBlock.Inlines>
+                        <Run Text="上一次更新于："/>
+                        <LineBreak/>
+                        <Run Text="{Binding LastUpdated, Mode=OneTime}"/>
+                    </TextBlock.Inlines>
+                </TextBlock>
             </StackPanel>
         </wpfui:CardExpander>
         <wpfui:CardExpander

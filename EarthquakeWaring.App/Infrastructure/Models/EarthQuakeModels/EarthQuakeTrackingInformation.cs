@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using EarthquakeWaring.App.Services;
 
 namespace EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 
@@ -24,7 +23,7 @@ public class EarthQuakeTrackingInformation : INotifyPropertyChanged
     private EarthQuakeStage _stage;
 
     public bool DontUseShouldAlert { get; set; }
-    
+
     public EarthQuakeStage Stage
     {
         get => _stage;
@@ -110,7 +109,7 @@ public class EarthQuakeTrackingInformation : INotifyPropertyChanged
         get => _countDown;
         set => SetField(ref _countDown, value);
     }
-    
+
 
     public event PropertyChangedEventHandler? PropertyChanged;
 

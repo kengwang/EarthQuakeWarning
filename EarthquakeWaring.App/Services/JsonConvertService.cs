@@ -1,7 +1,7 @@
-﻿using System;
+﻿using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
+using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 
 namespace EarthquakeWaring.App.Services;
 
