@@ -12,6 +12,13 @@ public class TrackerSetting : INotificationOption
     private bool _broadcastLiveIntensity;
     private bool _broadcastLiveTips;
     private bool _broadcastCountDown = true;
+    private bool _maximumVolume = true;
+
+    public bool MaximumVolume
+    {
+        get => _maximumVolume;
+        set => SetField(ref _maximumVolume, value);
+    }
 
     public bool BroadcastCountDown
     {

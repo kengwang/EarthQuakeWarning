@@ -210,6 +210,16 @@
                     Margin="0,12,0,0">
                     <wpfui:CardControl.Header>
                         <StackPanel Orientation="Vertical">
+                            <TextBlock Text="预警时调整最大音量" FontWeight="Bold"/>
+                            <TextBlock Text="会将默认输出设备音量调至最大" FontWeight="Light"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                    <wpfui:ToggleSwitch IsChecked="{Binding TrackerSetting.Setting.MaximumVolume, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Margin="0,12,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
                             <TextBlock Text="播报实时烈度说明" FontWeight="Bold"/>
                             <TextBlock Text="会播报对应烈度的信息" FontWeight="Light"/>
                         </StackPanel>
