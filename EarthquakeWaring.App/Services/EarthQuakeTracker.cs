@@ -116,7 +116,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                 _trackingInformation.Intensity =
                     _earthQuakeCalculator.GetIntensity(_trackingInformation.Magnitude, _trackingInformation.Distance);
                 _trackingInformation.CountDown = (int)(_trackingInformation.TheoryCountDown -
-                                                       (DateTime.Now - SimulateTimeSpan -
+                                                       (DateTime.Now + ntpClient!.Offset - SimulateTimeSpan -
                                                         _trackingInformation.StartTime).TotalSeconds);
                 _trackingInformation.Stage = GetEarthQuakeAlertStage(_trackingInformation);
 
