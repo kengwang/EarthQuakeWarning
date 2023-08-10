@@ -62,7 +62,7 @@
                         <TextBlock Text="NTP设置（需要重启应用）" FontWeight="Bold"/>
                         <TextBlock Text="请正确设置NTP服务器的地址" FontWeight="Light"/>
                     </StackPanel>
-                    <wpfui:Button Click="OpenPositionSelector" Content="测试NTP服务器是否正常" HorizontalAlignment="Right"/>
+                    <wpfui:Button Click="TestNTPServer" Content="测试NTP服务器是否正常" HorizontalAlignment="Right"/>
                 </StackPanel>
             </wpfui:CardExpander.Header>
             <StackPanel Orientation="Vertical">
@@ -77,7 +77,7 @@
                 <wpfui:CardControl Margin="0,8,0,0">
                     <wpfui:CardControl.Header>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="NTP服务器更新间隔" FontWeight="Bold"/>
+                            <TextBlock Text="NTP服务器更新间隔 (单位: 分钟)" FontWeight="Bold"/>
                         </StackPanel>
                     </wpfui:CardControl.Header>
                     <TextBox Text="{Binding TimeSetting.Setting.NTPTimeInterval, Mode=TwoWay}" />

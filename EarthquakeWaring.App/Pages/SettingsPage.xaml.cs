@@ -7,6 +7,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
 using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -17,11 +18,13 @@ public partial class SettingsPage : Page
     private bool dontFire = false;
     private readonly IServiceProvider _services;
     private readonly IHostApplicationLifetime _lifetime;
+    private readonly INTPHandler _ntpHandler;
 
-    public SettingsPage(SettingsPageViewModel vm, IServiceProvider services, IHostApplicationLifetime lifetime)
+    public SettingsPage(SettingsPageViewModel vm, IServiceProvider services, IHostApplicationLifetime lifetime, INTPHandler ntpHandler)
     {
         _services = services;
         _lifetime = lifetime;
+        _ntpHandler = ntpHandler;
         InitializeComponent();
         DataContext = vm;
         dontFire = true;
@@ -74,12 +77,15 @@ public partial class SettingsPage : Page
         var setting = _services.GetService<ISetting<TimeSetting>>();
         var server = setting?.Setting?.NTPServer;
         var client = new NtpClient(server, TimeSpan.FromMilliseconds(500));
+        var cts = new CancellationTokenSource();
+        cts.CancelAfter(TimeSpan.FromSeconds(10));
+        
         try
         {
-            var result = await client.QueryAsync();
-            if (result.Synchronized)
+            var result = await _ntpHandler.GetNTPServerTime(cts.Token);
+            if (result)
             {
-                MessageBox.Show("NTP服务器状态正常");
+                MessageBox.Show($"NTP服务器状态正常, 当前时间 {DateTime.Now.Add(_ntpHandler.Offset)}");
             }
             else
             {

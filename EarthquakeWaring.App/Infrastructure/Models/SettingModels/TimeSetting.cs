@@ -21,10 +21,7 @@ namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels
         public bool SetNTPTimeToMachine
         {
             get => _setNTPTimeToMachine;
-            set
-            {
-                SetField(ref _setNTPTimeToMachine, value);
-            }
+            set => SetField(ref _setNTPTimeToMachine, value);
         }
         private double _ntpTimeInterval = 30;
         public double NTPTimeInterval

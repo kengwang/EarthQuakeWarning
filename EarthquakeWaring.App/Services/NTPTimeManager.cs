@@ -4,9 +4,11 @@ using GuerrillaNtp;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Principal;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Vanara.PInvoke;
+using Timer = System.Timers.Timer;
 
 namespace EarthquakeWaring.App.Services
 {
@@ -26,11 +28,11 @@ namespace EarthquakeWaring.App.Services
         {
             _ = GetNTPServerTime();
         }
-        public async Task<bool> GetNTPServerTime()
+        public async Task<bool> GetNTPServerTime(CancellationToken ctk = default)
         {
             try
             {
-                var result = await _ntpClient.QueryAsync();
+                var result = await _ntpClient.QueryAsync(ctk);
                 if (result.Synchronized)
                 {
                     if (_setting.Setting?.SetNTPTimeToMachine ?? false != true)
