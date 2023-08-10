@@ -1,7 +1,5 @@
 ﻿using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using NAudio.CoreAudioApi;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace EarthquakeWaring.App.Services
 {

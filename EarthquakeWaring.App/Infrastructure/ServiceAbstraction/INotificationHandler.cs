@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using EarthquakeWaring.App.Infrastructure.Models;
 
 namespace EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 

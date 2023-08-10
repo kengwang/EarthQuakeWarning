@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 
 namespace EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 

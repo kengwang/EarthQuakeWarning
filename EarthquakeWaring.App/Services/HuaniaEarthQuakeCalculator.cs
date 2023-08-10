@@ -1,8 +1,6 @@
-﻿using System;
-using EarthquakeWaring.App.Extensions;
-using EarthquakeWaring.App.Infrastructure;
+﻿using EarthquakeWaring.App.Extensions;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
-using Microsoft.Extensions.Logging;
+using System;
 
 namespace EarthquakeWaring.App.Services;
 
@@ -134,11 +132,13 @@ public class HuaniaEarthQuakeCalculator : IEarthQuakeCalculator
 
     public double GetCountDownSeconds(double depth, double distance)
     {
-        if (depth < 0.0f || distance < 0.0f) {
+        if (depth < 0.0f || distance < 0.0f)
+        {
             return 0.0f;
         }
-        var i = (int) (depth / 5.0f);
-        if (i > 6) {
+        var i = (int)(depth / 5.0f);
+        if (i > 6)
+        {
             i = 6;
         }
         var fArr = ARRAY;
@@ -146,13 +146,16 @@ public class HuaniaEarthQuakeCalculator : IEarthQuakeCalculator
         var fArr2 = fArr[0];
         var fArr3 = fArr[i + 1];
         var length = fArr2.Length - 1;
-        if (distance > fArr2[length]) {
+        if (distance > fArr2[length])
+        {
             return (SLOPE[i] * distance) + INTERCEPT[i];
         }
-        if (Math.Abs(distance - fArr2[length]) < 0.0) {
+        if (Math.Abs(distance - fArr2[length]) < 0.0)
+        {
             return fArr3[^1];
         }
-        while (i2 < length && distance >= fArr2[i2]) {
+        while (i2 < length && distance >= fArr2[i2])
+        {
             i2++;
         }
         var i3 = i2 - 1;

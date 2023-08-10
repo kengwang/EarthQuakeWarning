@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
+﻿using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
@@ -13,6 +6,13 @@ using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Services;
 using EarthquakeWaring.App.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Button = Wpf.Ui.Controls.Button;
 
 namespace EarthquakeWaring.App.Pages;
@@ -90,7 +90,8 @@ public partial class EarthQuakeExamplesPage : Page
         var cancellationTokenSource = new CancellationTokenSource();
         var info = (((sender as Button)?.Tag as EarthQuakeTrackingInformation)!);
         var tracker = _service.GetService<IEarthQuakeTracker>();
-        tracker!.SimulateTimeSpan = DateTime.Now - info.StartTime;
+        var ntpClient = _service.GetService<INTPHandler>();
+        tracker!.SimulateTimeSpan = DateTime.Now + ntpClient!.Offset - info.StartTime;
         var results = _jsonConvert.ConvertTo<List<EarthQuakeUpdate>>(Examples);
         tracker!.SimulateUpdates = results?.Where(t => t.EventId == info.EventId).Select(t =>
         {

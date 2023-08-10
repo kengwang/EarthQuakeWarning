@@ -55,6 +55,52 @@
             </StackPanel>
         </wpfui:CardExpander>
         <wpfui:CardExpander
+            Margin="0,12,0,0" Icon="PhoneScreenTime24">
+            <wpfui:CardExpander.Header>
+                <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                        <TextBlock Text="NTP设置（需要重启应用）" FontWeight="Bold"/>
+                        <TextBlock Text="请正确设置NTP服务器的地址" FontWeight="Light"/>
+                    </StackPanel>
+                    <wpfui:Button Click="TestNTPServer" Content="测试NTP服务器是否正常" HorizontalAlignment="Right"/>
+                </StackPanel>
+            </wpfui:CardExpander.Header>
+            <StackPanel Orientation="Vertical">
+                <wpfui:CardControl Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="NTP服务器地址" FontWeight="Bold"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                    <TextBox Text="{Binding TimeSetting.Setting.NTPServer, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="NTP服务器更新间隔 (单位: 分钟)" FontWeight="Bold"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                    <TextBox Text="{Binding TimeSetting.Setting.NTPTimeInterval, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="在管理员身份运行时设置网络时间至本地" FontWeight="Bold"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                    <wpfui:ToggleSwitch IsChecked="{Binding TimeSetting.Setting.SetNTPTimeToMachine, Mode=TwoWay}"
+                                        HorizontalAlignment="Right"/>
+                </wpfui:CardControl>
+                <TextBlock>
+                    <TextBlock.Inlines>
+                        <Run Text="上一次更新于："/>
+                        <LineBreak/>
+                        <Run Text="{Binding LastUpdated, Mode=OneTime}"/>
+                    </TextBlock.Inlines>
+                </TextBlock>
+            </StackPanel>
+        </wpfui:CardExpander>
+        <wpfui:CardExpander
             Margin="0,12,0,0" Icon="Alert24">
             <wpfui:CardExpander.Header>
                 <StackPanel Orientation="Vertical">

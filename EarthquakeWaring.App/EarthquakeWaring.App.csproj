@@ -7,23 +7,25 @@
         <UseWPF>true</UseWPF>
         <LangVersion>latest</LangVersion>
         <IsPackable>false</IsPackable>
-        <PackageVersion>1.0.5</PackageVersion>
-        <AssemblyVersion>1.0.5.0</AssemblyVersion>
-        <FileVersion>1.0.5.0</FileVersion>
+        <PackageVersion>1.0.6</PackageVersion>
+        <AssemblyVersion>1.0.6.0</AssemblyVersion>
+        <FileVersion>1.0.6.0</FileVersion>
         <NeutralLanguage>zh-Hans</NeutralLanguage>
         <UseWindowsForms>True</UseWindowsForms>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="GuerrillaNtp" Version="3.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-      <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1462.37" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+      <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1901.177" />
       <PackageReference Include="NAudio.Core" Version="2.1.0" />
       <PackageReference Include="NAudio.Wasapi" Version="2.1.0" />
-      <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
+      <PackageReference Include="Serilog.Extensions.Hosting" Version="7.0.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
       <PackageReference Include="System.Speech" Version="7.0.0" />
+      <PackageReference Include="Vanara.PInvoke.Kernel32" Version="3.4.16" />
       <PackageReference Include="WPF-UI" Version="2.0.3" />
     </ItemGroup>
 

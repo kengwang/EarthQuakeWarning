@@ -1,8 +1,7 @@
-﻿using System;
-using System.ComponentModel;
-using System.Windows;
-using EarthquakeWaring.App.Pages;
+﻿using EarthquakeWaring.App.Pages;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Windows;
 
 namespace EarthquakeWaring.App.Windows
 {
