@@ -1,9 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using EarthquakeWaring.App.Extensions;
+﻿using EarthquakeWaring.App.Extensions;
 using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
@@ -12,6 +7,11 @@ using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Services;
 using EarthquakeWaring.App.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using Button = Wpf.Ui.Controls.Button;
 
 namespace EarthquakeWaring.App.Pages;
@@ -29,11 +29,11 @@ public partial class EarthQuakesListPage : Page
     public EarthQuakesListPage()
     {
         _service = DI.Services;
-        _calculator =_service.GetRequiredService<IEarthQuakeCalculator>();
+        _calculator = _service.GetRequiredService<IEarthQuakeCalculator>();
         _quakeApi = _service.GetRequiredService<IEarthQuakeApi>();
         _alertLimit = _service.GetRequiredService<ISetting<AlertLimit>>();
-        _currentPosition = _service.GetRequiredService<ISetting<CurrentPosition> >();
-        
+        _currentPosition = _service.GetRequiredService<ISetting<CurrentPosition>>();
+
         _viewModel = new EarthQuakesListPageViewModel();
         InitializeComponent();
     }
@@ -87,7 +87,8 @@ public partial class EarthQuakesListPage : Page
         var cancellationTokenSource = new CancellationTokenSource();
         var info = (((sender as Button)?.Tag as EarthQuakeTrackingInformation)!);
         var tracker = _service.GetService<IEarthQuakeTracker>();
-        tracker!.SimulateTimeSpan = DateTime.Now - info.StartTime;
+        var ntpClient = _service.GetService<INTPHandler>();
+        tracker!.SimulateTimeSpan = DateTime.Now + ntpClient!.Offset - info.StartTime;
         tracker!.SimulateUpdates = await _quakeApi.GetEarthQuakeInfo(info.EventId, cancellationTokenSource.Token);
         tracker?.StartTrack(new HuaniaEarthQuake()
         {

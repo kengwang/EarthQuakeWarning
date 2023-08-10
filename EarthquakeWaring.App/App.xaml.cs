@@ -1,11 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Windows;
-using System.Windows.Controls;
-using EarthquakeWaring.App.Extensions;
+﻿using EarthquakeWaring.App.Extensions;
 using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
@@ -17,6 +10,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace EarthquakeWaring.App
 {
@@ -71,6 +70,7 @@ namespace EarthquakeWaring.App
             if (Host.Services.GetService<ISetting<UpdaterSetting>>()?.Setting?.ShowNotifyIcon is not false)
                 Host.Services.GetService<ITrayIconHolder>()?.ShowIcon();
             Host.RunAsync();
+            Host.Services.GetService<INTPHandler>()?.GetNTPServerTime();
         }
 
         public static void ConfigureServices(IServiceCollection service)
@@ -84,6 +84,7 @@ namespace EarthquakeWaring.App
             service.AddSingleton<INotificationHandler<HeartBeatNotification>, EarthQuakeInfoUpdater>();
             service.AddSingleton<IJsonConvertService, JsonConvertService>();
             service.AddSingleton(typeof(ISetting<>), typeof(FileJsonSetting<>));
+            service.AddSingleton<INTPHandler, NTPTimeManager>();
 
             // For UI
             service.AddTransient<MainWindow>();
@@ -96,7 +97,7 @@ namespace EarthquakeWaring.App
             service.AddSingleton<ITrayIconHolder, TrayIconHolder>();
 
             service.AddHostedService<HeartBeatBackgroundService>();
-            service.AddSingleton<IVolumeManager,VolumeManager>();
+            service.AddSingleton<IVolumeManager, VolumeManager>();
         }
     }
 }

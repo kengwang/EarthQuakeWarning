@@ -9,5 +9,5 @@ public class HeartBeatNotification : INotification
         Time = time;
     }
 
-    public DateTime Time { get;  }
+    public DateTime Time { get; }
 }

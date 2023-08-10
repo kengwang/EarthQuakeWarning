@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
+﻿using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EarthquakeWaring.App.Services;
 

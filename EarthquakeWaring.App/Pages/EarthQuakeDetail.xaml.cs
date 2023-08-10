@@ -1,8 +1,8 @@
-﻿using System;
-using System.Windows.Controls;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+﻿using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using Microsoft.Web.WebView2.Core;
+using System;
+using System.Windows.Controls;
 
 namespace EarthquakeWaring.App.Pages;
 
@@ -19,6 +19,12 @@ public partial class EarthQuakeDetail : Page
         }
 
         MapView.Source = new Uri(url);
+        Unloaded += EarthQuakeDetail_Unloaded;
+    }
+
+    private void EarthQuakeDetail_Unloaded(object sender, System.Windows.RoutedEventArgs e)
+    {
+        MapView?.Dispose();
     }
 
     private void MapView_OnNavigationCompleted(object? sender, CoreWebView2NavigationCompletedEventArgs e)

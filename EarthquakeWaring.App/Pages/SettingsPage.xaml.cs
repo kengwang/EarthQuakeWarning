@@ -1,15 +1,15 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using EarthquakeWaring.App.Infrastructure.Models;
+﻿using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
-using EarthquakeWaring.App.Windows;
+using GuerrillaNtp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Win32;
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace EarthquakeWaring.App.Pages;
 
@@ -18,14 +18,16 @@ public partial class SettingsPage : Page
     private bool dontFire = false;
     private readonly IServiceProvider _services;
     private readonly IHostApplicationLifetime _lifetime;
+    private readonly INTPHandler _ntpHandler;
 
-    public SettingsPage(SettingsPageViewModel vm, IServiceProvider services, IHostApplicationLifetime lifetime)
+    public SettingsPage(SettingsPageViewModel vm, IServiceProvider services, IHostApplicationLifetime lifetime, INTPHandler ntpHandler)
     {
         _services = services;
         _lifetime = lifetime;
+        _ntpHandler = ntpHandler;
         InitializeComponent();
         DataContext = vm;
-        dontFire= true;
+        dontFire = true;
         StartupSwitch.IsChecked =
             Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\")?.GetValue(nameof(EarthquakeWaring)) != null;
         dontFire = false;
@@ -55,7 +57,7 @@ public partial class SettingsPage : Page
         Process.Start("explorer.exe", "https://github.com/kengwang");
     }
 
-    private void OpenSourceClick(object sender, RoutedEventArgs e)  
+    private void OpenSourceClick(object sender, RoutedEventArgs e)
     {
         Process.Start("explorer.exe", "https://github.com/kengwang/EarthQuakeWarning");
     }
@@ -69,5 +71,30 @@ public partial class SettingsPage : Page
     {
         _lifetime.StopApplication();
         Application.Current.Shutdown();
+    }
+    public async void TestNTPServer(object sender, RoutedEventArgs e)
+    {
+        var setting = _services.GetService<ISetting<TimeSetting>>();
+        var server = setting?.Setting?.NTPServer;
+        var client = new NtpClient(server, TimeSpan.FromMilliseconds(500));
+        var cts = new CancellationTokenSource();
+        cts.CancelAfter(TimeSpan.FromSeconds(10));
+        
+        try
+        {
+            var result = await _ntpHandler.GetNTPServerTime(cts.Token);
+            if (result)
+            {
+                MessageBox.Show($"NTP服务器状态正常, 当前时间 {DateTime.Now.Add(_ntpHandler.Offset)}");
+            }
+            else
+            {
+                MessageBox.Show("NTP服务器状态异常");
+            }
+        }
+        catch
+        {
+            MessageBox.Show("NTP服务器状态异常");
+        }
     }
 }

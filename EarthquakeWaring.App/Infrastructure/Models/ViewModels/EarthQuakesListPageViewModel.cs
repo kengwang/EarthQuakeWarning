@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 
 namespace EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 

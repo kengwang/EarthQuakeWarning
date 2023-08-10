@@ -1,4 +1,10 @@
-﻿using System;
+﻿using EarthquakeWaring.App.Extensions;
+using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
+using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
+using EarthquakeWaring.App.Pages;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Media;
@@ -6,12 +12,6 @@ using System.Speech.Synthesis;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using EarthquakeWaring.App.Extensions;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
-using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
-using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
-using EarthquakeWaring.App.Pages;
-using Microsoft.Extensions.DependencyInjection;
 using static System.Threading.Tasks.Task;
 
 namespace EarthquakeWaring.App.Windows;
