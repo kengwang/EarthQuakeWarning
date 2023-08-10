@@ -94,7 +94,7 @@ namespace EarthquakeWaring.App.Services
         public NTPTimeManager(ISetting<TimeSetting> setting, ILogger<NTPTimeManager> logger)
         {
             _setting = setting;
-            NTPServer = setting.Setting?.NTPServer ?? "cn.ntp.org.cn";
+            NTPServer = setting.Setting?.NTPServer ?? "ntp.ntsc.ac.cn";
             _logger = logger;
             _ntpClient = new NtpClient(NTPServer, TimeSpan.FromMilliseconds(500));
             var interval = TimeSpan.FromMinutes(setting.Setting?.NTPTimeInterval ?? 30d);

@@ -8,7 +8,7 @@ namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels
     public class TimeSetting : INotificationOption
     {
 
-        private string _ntpServer = "cn.ntp.org.cn";
+        private string _ntpServer = "ntp.ntsc.ac.cn";
         public string NTPServer
         {
             get => _ntpServer;
