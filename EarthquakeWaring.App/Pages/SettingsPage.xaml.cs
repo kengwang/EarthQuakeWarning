@@ -82,10 +82,10 @@ public partial class SettingsPage : Page
         
         try
         {
-            var result = await _ntpHandler.GetNTPServerTime(cts.Token);
-            if (result)
+            var result = await client.QueryAsync(cts.Token);
+            if (result != null && result.Synchronized)
             {
-                MessageBox.Show($"NTP服务器状态正常, 当前时间 {DateTime.Now.Add(_ntpHandler.Offset)}");
+                MessageBox.Show($"NTP服务器状态正常, 当前时间 {result.Now.DateTime}");
             }
             else
             {

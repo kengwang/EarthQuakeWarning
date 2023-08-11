@@ -80,7 +80,7 @@
                             <TextBlock Text="NTP服务器更新间隔 (单位: 分钟)" FontWeight="Bold"/>
                         </StackPanel>
                     </wpfui:CardControl.Header>
-                    <TextBox Text="{Binding TimeSetting.Setting.NTPTimeInterval, Mode=TwoWay}" />
+                    <TextBox Text="{Binding TimeSetting.Setting.TimeCheckInterval, Mode=TwoWay}" />
                 </wpfui:CardControl>
                 <wpfui:CardControl Margin="0,8,0,0">
                     <wpfui:CardControl.Header>
@@ -88,7 +88,7 @@
                             <TextBlock Text="在管理员身份运行时设置网络时间至本地" FontWeight="Bold"/>
                         </StackPanel>
                     </wpfui:CardControl.Header>
-                    <wpfui:ToggleSwitch IsChecked="{Binding TimeSetting.Setting.SetNTPTimeToMachine, Mode=TwoWay}"
+                    <wpfui:ToggleSwitch IsChecked="{Binding TimeSetting.Setting.SetAccurateTimeToMachine, Mode=TwoWay}"
                                         HorizontalAlignment="Right"/>
                 </wpfui:CardControl>
                 <TextBlock>

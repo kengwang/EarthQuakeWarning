@@ -17,19 +17,19 @@ namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels
                 SetField(ref _ntpServer, value);
             }
         }
-        private bool _setNTPTimeToMachine = false;
-        public bool SetNTPTimeToMachine
+        private bool _setAccurateTimeToMachine = false;
+        public bool SetAccurateTimeToMachine
         {
-            get => _setNTPTimeToMachine;
-            set => SetField(ref _setNTPTimeToMachine, value);
+            get => _setAccurateTimeToMachine;
+            set => SetField(ref _setAccurateTimeToMachine, value);
         }
-        private double _ntpTimeInterval = 30;
-        public double NTPTimeInterval
+        private double _timeCheckInterval = 30;
+        public double TimeCheckInterval
         {
-            get => _ntpTimeInterval;
+            get => _timeCheckInterval;
             set
             {
-                SetField(ref _ntpTimeInterval, value);
+                SetField(ref _timeCheckInterval, value);
             }
         }
         public event PropertyChangedEventHandler? PropertyChanged;

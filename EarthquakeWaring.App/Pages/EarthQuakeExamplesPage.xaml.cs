@@ -90,8 +90,8 @@ public partial class EarthQuakeExamplesPage : Page
         var cancellationTokenSource = new CancellationTokenSource();
         var info = (((sender as Button)?.Tag as EarthQuakeTrackingInformation)!);
         var tracker = _service.GetService<IEarthQuakeTracker>();
-        var ntpClient = _service.GetService<INTPHandler>();
-        tracker!.SimulateTimeSpan = DateTime.Now + ntpClient!.Offset - info.StartTime;
+        var timeHandler = _service.GetService<ITimeHandler>();
+        tracker!.SimulateTimeSpan = DateTime.Now + timeHandler!.Offset - info.StartTime;
         var results = _jsonConvert.ConvertTo<List<EarthQuakeUpdate>>(Examples);
         tracker!.SimulateUpdates = results?.Where(t => t.EventId == info.EventId).Select(t =>
         {

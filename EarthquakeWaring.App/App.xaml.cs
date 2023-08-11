@@ -69,8 +69,8 @@ namespace EarthquakeWaring.App
 
             if (Host.Services.GetService<ISetting<UpdaterSetting>>()?.Setting?.ShowNotifyIcon is not false)
                 Host.Services.GetService<ITrayIconHolder>()?.ShowIcon();
-            Host.RunAsync();
             Host.Services.GetService<INTPHandler>()?.GetNTPServerTime();
+            Host.RunAsync();
         }
 
         public static void ConfigureServices(IServiceCollection service)
@@ -84,6 +84,7 @@ namespace EarthquakeWaring.App
             service.AddSingleton<INotificationHandler<HeartBeatNotification>, EarthQuakeInfoUpdater>();
             service.AddSingleton<IJsonConvertService, JsonConvertService>();
             service.AddSingleton(typeof(ISetting<>), typeof(FileJsonSetting<>));
+            service.AddSingleton<ITimeHandler,TimeManager>();
             service.AddSingleton<INTPHandler, NTPTimeManager>();
 
             // For UI
