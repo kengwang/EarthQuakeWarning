@@ -97,4 +97,11 @@ public partial class SettingsPage : Page
             MessageBox.Show("NTP服务器状态异常");
         }
     }
+
+    private void GetGnssInformation(object sender, RoutedEventArgs e)
+    {
+        var cts = new CancellationTokenSource();
+        cts.CancelAfter(TimeSpan.FromSeconds(10));
+        _ =  _services.GetService<IGNSSHandler>()?.GetCurrentInfoAsync(cts.Token);
+    }
 }

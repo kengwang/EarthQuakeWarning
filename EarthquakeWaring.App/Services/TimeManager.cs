@@ -13,7 +13,7 @@ namespace EarthquakeWaring.App.Services
     public class TimeManager : ITimeHandler
     {
         public TimeSpan Offset {get;set;} = TimeSpan.Zero;
-
+        public DateTime LastUpdated { get;set;} = DateTime.MinValue;
         public Timer Timer { get; }
 
         public TimeManager(ISetting<TimeSetting> setting ,ILogger<TimeManager> logger) 

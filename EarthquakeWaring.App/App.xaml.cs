@@ -14,6 +14,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -70,6 +71,9 @@ namespace EarthquakeWaring.App
             if (Host.Services.GetService<ISetting<UpdaterSetting>>()?.Setting?.ShowNotifyIcon is not false)
                 Host.Services.GetService<ITrayIconHolder>()?.ShowIcon();
             Host.Services.GetService<INTPHandler>()?.GetNTPServerTime();
+            var cts = new CancellationTokenSource();
+            cts.CancelAfter(TimeSpan.FromSeconds(10));
+            Host.Services.GetService<IGNSSHandler>()?.GetCurrentInfoAsync(cts.Token);
             Host.RunAsync();
         }
 
@@ -86,6 +90,7 @@ namespace EarthquakeWaring.App
             service.AddSingleton(typeof(ISetting<>), typeof(FileJsonSetting<>));
             service.AddSingleton<ITimeHandler,TimeManager>();
             service.AddSingleton<INTPHandler, NTPTimeManager>();
+            service.AddSingleton<IGNSSHandler,GNSSManager>();
 
             // For UI
             service.AddTransient<MainWindow>();

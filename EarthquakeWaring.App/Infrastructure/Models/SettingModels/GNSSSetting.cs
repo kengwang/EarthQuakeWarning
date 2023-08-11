@@ -5,38 +5,35 @@ using System.Runtime.CompilerServices;
 
 namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels
 {
-    public class TimeSetting : INotificationOption
+    public class GNSSSetting : INotificationOption
     {
 
-        private string _ntpServer = "ntp.ntsc.ac.cn";
-        public string NTPServer
+        private string _port = "COM3";
+        public string Port
         {
-            get => _ntpServer;
+            get => _port;
             set
             {
-                SetField(ref _ntpServer, value);
+                SetField(ref _port, value);
             }
         }
-        private bool _setAccurateTimeToMachine = false;
-        public bool SetAccurateTimeToMachine
+        private int _baud = 9600;
+        public int Baud
         {
-            get => _setAccurateTimeToMachine;
-            set => SetField(ref _setAccurateTimeToMachine, value);
-        }
-        private double _timeCheckInterval = 30d;
-        public double TimeCheckInterval
-        {
-            get => _timeCheckInterval;
+            get => _baud;
             set
             {
-                SetField(ref _timeCheckInterval, value);
+                SetField(ref _baud, value);
             }
         }
-        private bool _useGNSSTime = false;
-        public bool UseGNSSTime
+        private bool _useGNSS = false;
+        public bool UseGNSS
         {
-            get => _useGNSSTime;
-            set => SetField(ref _useGNSSTime, value);
+            get => _useGNSS;
+            set
+            {
+                SetField(ref _useGNSS, value);
+            }
         }
         public event PropertyChangedEventHandler? PropertyChanged;
 

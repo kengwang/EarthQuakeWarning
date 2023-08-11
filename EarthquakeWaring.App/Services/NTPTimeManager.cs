@@ -20,14 +20,13 @@ namespace EarthquakeWaring.App.Services
         private NtpClient _ntpClient;
 
         public string NTPServer { get; }
-        public DateTime LastUpdated => _lastUpdated;
-        public DateTime _lastUpdated = DateTime.MinValue;
         public void GetNTPServerTime(object? sender, ElapsedEventArgs e)
         {
             _ = GetNTPServerTime();
         }
         public async Task<bool> GetNTPServerTime(CancellationToken ctk = default)
         {
+            if (_setting.Setting!.UseGNSSTime) return false;
             try
             {
                 var result = await _ntpClient.QueryAsync(ctk);
@@ -42,7 +41,7 @@ namespace EarthquakeWaring.App.Services
                         var sysTimeResult = TrySetSystemTime(result.Now.DateTime);
                         if (!sysTimeResult) _timeHandler.Offset = result.CorrectionOffset;
                     }
-                    _lastUpdated = result.Now.DateTime;
+                    _timeHandler.LastUpdated = result.Now.DateTime;
                     return true;
                 }
                 else
