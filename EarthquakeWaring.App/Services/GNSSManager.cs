@@ -61,7 +61,7 @@ namespace EarthquakeWaring.App.Services
             }
             finally
             {
-                await Task.Delay(1000);
+                await Task.Delay(500);
                 _nmeaDeviceShouldOpen = false;
                 NMEADevice?.CloseAsync();
                 NMEADevice?.Dispose();
@@ -110,7 +110,11 @@ namespace EarthquakeWaring.App.Services
                     if (_timeSetting.Setting!.UseGNSSTime)
                     {
                         var time = message.FixTime.LocalDateTime;
-                        var result = TrySetSystemTime(time);
+                        var result = false;
+                        if (_timeSetting.Setting?.SetAccurateTimeToMachine ?? false != true)
+                        {
+                            result = TrySetSystemTime(time);
+                        }
                         TimeSpan offset;
                         if (!result)
                         {
