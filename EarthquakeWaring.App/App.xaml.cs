@@ -88,9 +88,9 @@ namespace EarthquakeWaring.App
             service.AddSingleton<INotificationHandler<HeartBeatNotification>, EarthQuakeInfoUpdater>();
             service.AddSingleton<IJsonConvertService, JsonConvertService>();
             service.AddSingleton(typeof(ISetting<>), typeof(FileJsonSetting<>));
-            service.AddSingleton<ITimeHandler,TimeManager>();
+            service.AddSingleton<ITimeHandler, TimeManager>();
             service.AddSingleton<INTPHandler, NTPTimeManager>();
-            service.AddSingleton<IGNSSHandler,GNSSManager>();
+            service.AddSingleton<IGNSSHandler, GNSSManager>();
 
             // For UI
             service.AddTransient<MainWindow>();

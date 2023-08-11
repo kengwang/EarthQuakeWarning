@@ -4,13 +4,12 @@ using Microsoft.Extensions.Logging;
 using NmeaParser;
 using NmeaParser.Messages;
 using System;
-using System.Collections.Generic;
+using System.IO.Ports;
 using System.Linq;
 using System.Security.Principal;
-using System.Text;
-using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Timers;
 using Vanara.PInvoke;
 
 namespace EarthquakeWaring.App.Services
@@ -34,7 +33,7 @@ namespace EarthquakeWaring.App.Services
             var contains = SerialPort.GetPortNames().Contains(port);
             if (!contains) return false;
             _nmeaDeviceShouldOpen = true;
-            NMEADevice = new SerialPortDevice(new SerialPort(port,baud));
+            NMEADevice = new SerialPortDevice(new SerialPort(port, baud));
             var result = await OpenNMEADevice(token);
             return result;
         }
@@ -68,7 +67,7 @@ namespace EarthquakeWaring.App.Services
                 NMEADevice?.Dispose();
                 NMEADevice = null;
             }
-            
+
         }
         public bool TrySetSystemTime(DateTime dateTime)
         {
@@ -104,7 +103,7 @@ namespace EarthquakeWaring.App.Services
         }
         private void NMEADevice_MessageReceived(object? sender, NmeaMessageReceivedEventArgs e)
         {
-            if(e.Message is Rmc message)
+            if (e.Message is Rmc message)
             {
                 if (message.Active)
                 {
@@ -129,11 +128,11 @@ namespace EarthquakeWaring.App.Services
                     _positionSetting.Setting!.Latitude = latitude;
                     _timeHandler.LastUpdated = message.FixTime.LocalDateTime;
                     if (NMEADevice is not null) NMEADevice.MessageReceived -= NMEADevice_MessageReceived;
-                    _nmeaDeviceShouldOpen = false; 
+                    _nmeaDeviceShouldOpen = false;
                 }
             }
         }
-        private void OnTimerElapsed(object? sender, System.Timers.ElapsedEventArgs e)
+        private void OnTimerElapsed(object? sender, ElapsedEventArgs e)
         {
             _ = GetCurrentInfoAsync();
         }

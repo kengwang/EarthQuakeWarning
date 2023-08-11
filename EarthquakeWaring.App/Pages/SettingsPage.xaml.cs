@@ -79,7 +79,7 @@ public partial class SettingsPage : Page
         var client = new NtpClient(server, TimeSpan.FromMilliseconds(500));
         var cts = new CancellationTokenSource();
         cts.CancelAfter(TimeSpan.FromSeconds(10));
-        
+
         try
         {
             var result = await client.QueryAsync(cts.Token);
@@ -102,6 +102,6 @@ public partial class SettingsPage : Page
     {
         var cts = new CancellationTokenSource();
         cts.CancelAfter(TimeSpan.FromSeconds(10));
-        _ =  _services.GetService<IGNSSHandler>()?.GetCurrentInfoAsync(cts.Token);
+        _ = _services.GetService<IGNSSHandler>()?.GetCurrentInfoAsync(cts.Token);
     }
 }

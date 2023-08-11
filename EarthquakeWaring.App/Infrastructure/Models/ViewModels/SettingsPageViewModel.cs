@@ -1,6 +1,5 @@
 ﻿using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
-using EarthquakeWaring.App.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
