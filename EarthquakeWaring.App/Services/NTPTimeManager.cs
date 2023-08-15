@@ -1,6 +1,7 @@
 ﻿using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using GuerrillaNtp;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Principal;
@@ -17,6 +18,7 @@ namespace EarthquakeWaring.App.Services
         private ILogger<NTPTimeManager> _logger;
         private ITimeHandler _timeHandler;
         private NtpClient _ntpClient;
+        private IServiceProvider _serviceProvider;
 
         public string NTPServer { get; }
         public void GetNTPServerTime(object? sender, ElapsedEventArgs e)
@@ -25,7 +27,8 @@ namespace EarthquakeWaring.App.Services
         }
         public async Task<bool> GetNTPServerTime(CancellationToken ctk = default)
         {
-            if (_setting.Setting!.UseGNSSTime) return false;
+            var deviceExists = _serviceProvider.GetService<IGNSSHandler>()!.IsDeviceExists;
+            if (_setting.Setting!.UseGNSSTime && deviceExists == true) return false;
             try
             {
                 var result = await _ntpClient.QueryAsync(ctk);
@@ -89,7 +92,7 @@ namespace EarthquakeWaring.App.Services
                 return false;
             }
         }
-        public NTPTimeManager(ISetting<TimeSetting> setting, ITimeHandler timeHandler, ILogger<NTPTimeManager> logger)
+        public NTPTimeManager(ISetting<TimeSetting> setting, ITimeHandler timeHandler, ILogger<NTPTimeManager> logger, IServiceProvider provider)
         {
             _setting = setting;
             _timeHandler = timeHandler;
@@ -97,6 +100,7 @@ namespace EarthquakeWaring.App.Services
             NTPServer = setting.Setting?.NTPServer ?? "ntp.ntsc.ac.cn";
             _logger = logger;
             _ntpClient = new NtpClient(NTPServer, TimeSpan.FromMilliseconds(500));
+            _serviceProvider = provider;
         }
     }
 }

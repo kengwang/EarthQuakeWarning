@@ -23,6 +23,7 @@ namespace EarthquakeWaring.App.Services
         private ISetting<GNSSSetting> _gnssSetting;
         private ITimeHandler _timeHandler;
         public NmeaDevice? NMEADevice { get; set; }
+        public bool IsDeviceExists => SerialPort.GetPortNames().Contains(_gnssSetting.Setting!.Port);
 
         public async Task<bool> GetCurrentInfoAsync(CancellationToken token = default)
         {
@@ -30,8 +31,7 @@ namespace EarthquakeWaring.App.Services
             if (NMEADevice?.IsOpen is true) return false;
             var baud = _gnssSetting.Setting!.Baud;
             var port = _gnssSetting.Setting!.Port;
-            var contains = SerialPort.GetPortNames().Contains(port);
-            if (!contains) return false;
+            if (!IsDeviceExists) return false;
             _nmeaDeviceShouldOpen = true;
             NMEADevice = new SerialPortDevice(new SerialPort(port, baud));
             var result = await OpenNMEADevice(token);

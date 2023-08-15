@@ -10,5 +10,6 @@ namespace EarthquakeWaring.App.Infrastructure.ServiceAbstraction
         public Task<bool> GetCurrentInfoAsync(CancellationToken token = default);
         public bool TrySetSystemTime(DateTime dateTime);
         public NmeaDevice? NMEADevice { get; set; }
+        public bool IsDeviceExists { get; }
     }
 }
