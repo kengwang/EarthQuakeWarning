@@ -10,19 +10,19 @@ namespace EarthquakeWaring.App.Services;
 public class HeartBeatBackgroundService : BackgroundService
 {
     private readonly INotificationPublisher _publisher;
-    private readonly INTPHandler _ntpClient;
+    private readonly ITimeHandler _timeHandler;
 
-    public HeartBeatBackgroundService(INotificationPublisher publisher, INTPHandler ntpClient)
+    public HeartBeatBackgroundService(INotificationPublisher publisher, ITimeHandler timeHandler)
     {
         _publisher = publisher;
-        _ntpClient = ntpClient;
+        _timeHandler = timeHandler;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            await _publisher.Publish(new HeartBeatNotification(DateTime.Now + _ntpClient!.Offset), stoppingToken).ConfigureAwait(false);
+            await _publisher.Publish(new HeartBeatNotification(DateTime.Now + _timeHandler!.Offset), stoppingToken).ConfigureAwait(false);
             await Task.Delay(1000, stoppingToken).ConfigureAwait(false);
         }
     }

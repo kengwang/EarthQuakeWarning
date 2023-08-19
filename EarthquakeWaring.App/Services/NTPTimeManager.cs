@@ -1,6 +1,7 @@
 ﻿using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using GuerrillaNtp;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Security.Principal;
@@ -8,54 +9,52 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Timers;
 using Vanara.PInvoke;
-using Timer = System.Timers.Timer;
 
 namespace EarthquakeWaring.App.Services
 {
     public class NTPTimeManager : INTPHandler
     {
-        public TimeSpan Offset => _offset;
-        private TimeSpan _offset = TimeSpan.Zero;
         private ISetting<TimeSetting> _setting;
         private ILogger<NTPTimeManager> _logger;
-        private Timer _timer;
+        private ITimeHandler _timeHandler;
         private NtpClient _ntpClient;
+        private IServiceProvider _serviceProvider;
 
         public string NTPServer { get; }
-        public DateTime LastUpdated => _lastUpdated;
-        public DateTime _lastUpdated = DateTime.MinValue;
         public void GetNTPServerTime(object? sender, ElapsedEventArgs e)
         {
             _ = GetNTPServerTime();
         }
         public async Task<bool> GetNTPServerTime(CancellationToken ctk = default)
         {
+            var deviceExists = _serviceProvider.GetService<IGNSSHandler>()!.IsDeviceExists;
+            if (_setting.Setting!.UseGNSSTime && deviceExists == true) return false;
             try
             {
                 var result = await _ntpClient.QueryAsync(ctk);
                 if (result.Synchronized)
                 {
-                    if (_setting.Setting?.SetNTPTimeToMachine ?? false != true)
+                    if (_setting.Setting?.SetAccurateTimeToMachine ?? false != true)
                     {
-                        _offset = result.CorrectionOffset;
+                        _timeHandler.Offset = result.CorrectionOffset;
                     }
                     else
                     {
-                        var sysTimeResult = TrySetSystemTime(result.Now.LocalDateTime);
-                        if (!sysTimeResult) _offset = result.CorrectionOffset;
+                        var sysTimeResult = TrySetSystemTime(result.Now.DateTime);
+                        if (!sysTimeResult) _timeHandler.Offset = result.CorrectionOffset;
                     }
-                    _lastUpdated = result.Now.LocalDateTime;
+                    _timeHandler.LastUpdated = result.Now.DateTime;
                     return true;
                 }
                 else
                 {
-                    _offset = TimeSpan.Zero;
+                    _timeHandler.Offset = TimeSpan.Zero;
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Query Failed. NTP Server Is {NTPServer}");
-                _offset = TimeSpan.Zero;
+                _timeHandler.Offset = TimeSpan.Zero;
                 return false;
             }
             return false;
@@ -93,17 +92,15 @@ namespace EarthquakeWaring.App.Services
                 return false;
             }
         }
-        public NTPTimeManager(ISetting<TimeSetting> setting, ILogger<NTPTimeManager> logger)
+        public NTPTimeManager(ISetting<TimeSetting> setting, ITimeHandler timeHandler, ILogger<NTPTimeManager> logger, IServiceProvider provider)
         {
             _setting = setting;
+            _timeHandler = timeHandler;
+            timeHandler.Timer.Elapsed += GetNTPServerTime;
             NTPServer = setting.Setting?.NTPServer ?? "ntp.ntsc.ac.cn";
             _logger = logger;
             _ntpClient = new NtpClient(NTPServer, TimeSpan.FromMilliseconds(500));
-            var interval = TimeSpan.FromMinutes(setting.Setting?.NTPTimeInterval ?? 30d);
-            _timer = new Timer(interval.TotalMilliseconds);
-            _timer.AutoReset = true;
-            _timer.Elapsed += GetNTPServerTime;
-            _timer.Start();
+            _serviceProvider = provider;
         }
     }
 }

@@ -22,14 +22,15 @@
         IsVirtualizing="True"
         VirtualizationMode="Recycling">
         <wpfui:CardExpander
-            Icon="Map24">
+            Icon="Earth24">
             <wpfui:CardExpander.Header>
                 <StackPanel Orientation="Horizontal">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                        <TextBlock Text="我的位置" FontWeight="Bold"/>
-                        <TextBlock Text="请手动输入您的经纬度坐标" FontWeight="Light"/>
+                        <TextBlock Text="时间和地区" FontWeight="Bold"/>
+                        <TextBlock Text="请正确设定您的经纬度坐标和时间模式" FontWeight="Light"/>
                     </StackPanel>
-                    <wpfui:Button Click="OpenPositionSelector" Content="打开 坐标拾取器" HorizontalAlignment="Right"/>
+                    <wpfui:Button Click="OpenPositionSelector" Content="打开 坐标拾取器"/>
+                    <wpfui:Button Click="TestNTPServer" Content="测试NTP服务器是否正常"/>
                 </StackPanel>
             </wpfui:CardExpander.Header>
             <StackPanel Orientation="Vertical">
@@ -52,24 +53,54 @@
                     </wpfui:CardControl.Header>
                     <TextBox Text="{Binding CurrentPosition.Setting.Latitude, Mode=TwoWay}" />
                 </wpfui:CardControl>
-            </StackPanel>
-        </wpfui:CardExpander>
-        <wpfui:CardExpander
-            Margin="0,12,0,0" Icon="PhoneScreenTime24">
-            <wpfui:CardExpander.Header>
-                <StackPanel Orientation="Horizontal">
-                    <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                        <TextBlock Text="NTP设置（需要重启应用）" FontWeight="Bold"/>
-                        <TextBlock Text="请正确设置NTP服务器的地址" FontWeight="Light"/>
-                    </StackPanel>
-                    <wpfui:Button Click="TestNTPServer" Content="测试NTP服务器是否正常" HorizontalAlignment="Right"/>
-                </StackPanel>
-            </wpfui:CardExpander.Header>
-            <StackPanel Orientation="Vertical">
+                <wpfui:CardControl
+                    Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="使用GNSS设备获取时间和地理位置"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                    <wpfui:ToggleSwitch IsChecked="{Binding GNSSSetting.Setting.UseGNSS, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="优先使用GNSS设备获取时间"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                    <wpfui:ToggleSwitch IsChecked="{Binding TimeSetting.Setting.UseGNSSTime, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="串口号: ( 如: COM3 )"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                    <TextBox Text="{Binding GNSSSetting.Setting.Port, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="波特率: ( 如: 9600 )"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                    <TextBox Text="{Binding GNSSSetting.Setting.Baud, Mode=TwoWay}" />
+                </wpfui:CardControl>
+                <wpfui:CardControl
+                    Margin="0,8,0,0">
+                    <wpfui:CardControl.Header>
+                        <StackPanel Orientation="Vertical">
+                            <wpfui:Button Click="GetGnssInformation" Content="手动获取GNSS信息"/>
+                        </StackPanel>
+                    </wpfui:CardControl.Header>
+                </wpfui:CardControl>
                 <wpfui:CardControl Margin="0,8,0,0">
                     <wpfui:CardControl.Header>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="NTP服务器地址" FontWeight="Bold"/>
+                            <TextBlock Text="NTP服务器地址（需要重启应用）" FontWeight="Bold"/>
                         </StackPanel>
                     </wpfui:CardControl.Header>
                     <TextBox Text="{Binding TimeSetting.Setting.NTPServer, Mode=TwoWay}" />
@@ -77,18 +108,18 @@
                 <wpfui:CardControl Margin="0,8,0,0">
                     <wpfui:CardControl.Header>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="NTP服务器更新间隔 (单位: 分钟)" FontWeight="Bold"/>
+                            <TextBlock Text="NTP服务器更新间隔 (单位: 分钟，需要重启应用)" FontWeight="Bold"/>
                         </StackPanel>
                     </wpfui:CardControl.Header>
-                    <TextBox Text="{Binding TimeSetting.Setting.NTPTimeInterval, Mode=TwoWay}" />
+                    <TextBox Text="{Binding TimeSetting.Setting.TimeCheckInterval, Mode=TwoWay}" />
                 </wpfui:CardControl>
                 <wpfui:CardControl Margin="0,8,0,0">
                     <wpfui:CardControl.Header>
                         <StackPanel Orientation="Vertical">
-                            <TextBlock Text="在管理员身份运行时设置网络时间至本地" FontWeight="Bold"/>
+                            <TextBlock Text="在管理员身份运行时设置时间至本地" FontWeight="Bold"/>
                         </StackPanel>
                     </wpfui:CardControl.Header>
-                    <wpfui:ToggleSwitch IsChecked="{Binding TimeSetting.Setting.SetNTPTimeToMachine, Mode=TwoWay}"
+                    <wpfui:ToggleSwitch IsChecked="{Binding TimeSetting.Setting.SetAccurateTimeToMachine, Mode=TwoWay}"
                                         HorizontalAlignment="Right"/>
                 </wpfui:CardControl>
                 <TextBlock>

@@ -1,6 +1,5 @@
 ﻿using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
-using EarthquakeWaring.App.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Reflection;
@@ -15,12 +14,12 @@ public class SettingsPageViewModel
     public ISetting<UpdaterSetting>? UpdateSetting { get; set; }
     public ISetting<TrackerSetting>? TrackerSetting { get; set; }
     public ISetting<TimeSetting>? TimeSetting { get; set; }
-
+    public ISetting<GNSSSetting>? GNSSSetting { get; set; }
     public string? Version => Assembly.GetExecutingAssembly().GetName().Version?.ToString();
-    public string? LastUpdated => (_provider.GetService<INTPHandler>() as NTPTimeManager)?.LastUpdated.ToString();
+    public string? LastUpdated => _provider.GetService<ITimeHandler>()?.LastUpdated.ToString();
 
     public SettingsPageViewModel(ISetting<CurrentPosition> currentPosition, ISetting<AlertLimit> alertLimit,
-        ISetting<UpdaterSetting>? updateSetting, ISetting<TrackerSetting>? trackerSetting, ISetting<TimeSetting>? timeSetting, IServiceProvider provider)
+        ISetting<UpdaterSetting>? updateSetting, ISetting<TrackerSetting>? trackerSetting, ISetting<TimeSetting>? timeSetting, ISetting<GNSSSetting> gnssSetting, IServiceProvider provider)
     {
         CurrentPosition = currentPosition;
         AlertLimit = alertLimit;
@@ -28,5 +27,6 @@ public class SettingsPageViewModel
         TrackerSetting = trackerSetting;
         TimeSetting = timeSetting;
         _provider = provider;
+        GNSSSetting = gnssSetting;
     }
 }

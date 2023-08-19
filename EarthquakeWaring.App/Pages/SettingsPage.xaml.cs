@@ -79,13 +79,13 @@ public partial class SettingsPage : Page
         var client = new NtpClient(server, TimeSpan.FromMilliseconds(500));
         var cts = new CancellationTokenSource();
         cts.CancelAfter(TimeSpan.FromSeconds(10));
-        
+
         try
         {
-            var result = await _ntpHandler.GetNTPServerTime(cts.Token);
-            if (result)
+            var result = await client.QueryAsync(cts.Token);
+            if (result != null && result.Synchronized)
             {
-                MessageBox.Show($"NTP服务器状态正常, 当前时间 {DateTime.Now.Add(_ntpHandler.Offset)}");
+                MessageBox.Show($"NTP服务器状态正常, 当前时间 {result.Now.DateTime}");
             }
             else
             {
@@ -96,5 +96,12 @@ public partial class SettingsPage : Page
         {
             MessageBox.Show("NTP服务器状态异常");
         }
+    }
+
+    private void GetGnssInformation(object sender, RoutedEventArgs e)
+    {
+        var cts = new CancellationTokenSource();
+        cts.CancelAfter(TimeSpan.FromSeconds(10));
+        _ = _services.GetService<IGNSSHandler>()?.GetCurrentInfoAsync(cts.Token);
     }
 }

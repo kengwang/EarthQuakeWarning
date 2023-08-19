@@ -68,7 +68,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                     await _earthQuakeApi.GetEarthQuakeInfo(huaniaEarthQuake.EventId,
                         _cancellationToken);
         EarthQuakeUpdate latestInfo;
-        var ntpClient = _service.GetService<INTPHandler>();
+        var timeHandler = _service.GetService<ITimeHandler>();
         if (SimulateTimeSpan == TimeSpan.Zero)
         {
             latestInfo = infos[^1];
@@ -76,17 +76,17 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         else
         {
             _logger.LogWarning("Simulating with simulatingInfo");
-            var simulatingInfo = infos.FirstOrDefault(t => t.UpdateAt > DateTime.Now + ntpClient!.Offset - SimulateTimeSpan);
+            var simulatingInfo = infos.FirstOrDefault(t => t.UpdateAt > DateTime.Now + timeHandler!.Offset - SimulateTimeSpan);
             if (infos.Count <= 0 && simulatingInfo == null) return;
             simulatingInfo ??= infos[^1];
             latestInfo = simulatingInfo;
         }
 
-        if ((DateTime.Now + ntpClient!.Offset - SimulateTimeSpan - latestInfo.StartAt).TotalSeconds >
+        if ((DateTime.Now + timeHandler!.Offset - SimulateTimeSpan - latestInfo.StartAt).TotalSeconds >
             _trackingInformation.TheoryCountDown + 30)
         {
             _logger.LogInformation("Earthquake Expired for {Time} but theory {Theory} Quitting.",
-                (DateTime.Now + ntpClient!.Offset - SimulateTimeSpan - latestInfo.UpdateAt).TotalSeconds,
+                (DateTime.Now + timeHandler!.Offset - SimulateTimeSpan - latestInfo.UpdateAt).TotalSeconds,
                 _trackingInformation.TheoryCountDown + 30);
             _tokenSource?.Cancel(); // Expired Information
             return;
@@ -116,7 +116,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                 _trackingInformation.Intensity =
                     _earthQuakeCalculator.GetIntensity(_trackingInformation.Magnitude, _trackingInformation.Distance);
                 _trackingInformation.CountDown = (int)(_trackingInformation.TheoryCountDown -
-                                                       (DateTime.Now - SimulateTimeSpan -
+                                                       (DateTime.Now + timeHandler!.Offset - SimulateTimeSpan -
                                                         _trackingInformation.StartTime).TotalSeconds);
                 _trackingInformation.Stage = GetEarthQuakeAlertStage(_trackingInformation);
 
