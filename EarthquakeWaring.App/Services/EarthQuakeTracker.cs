@@ -11,12 +11,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
+using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 
 namespace EarthquakeWaring.App.Services;
 
 public class EarthQuakeTracker : IEarthQuakeTracker
 {
-    private readonly IEarthQuakeApi _earthQuakeApi;
+    private readonly IEarthQuakeApiWrapper _earthQuakeApi;
     private readonly IEarthQuakeCalculator _earthQuakeCalculator;
     private readonly ISetting<CurrentPosition> _currentPosition;
     private readonly ISetting<AlertLimit> _alertLimit;
@@ -30,9 +31,10 @@ public class EarthQuakeTracker : IEarthQuakeTracker
     private CancellationTokenSource? _tokenSource;
     private CancellationToken _cancellationToken;
 
-    public EarthQuakeTracker(IEarthQuakeApi earthQuakeApi, IEarthQuakeCalculator earthQuakeCalculator,
-        ISetting<CurrentPosition> currentPosition, ILogger<EarthQuakeTracker> logger, ISetting<AlertLimit> alertLimit,
-        IServiceProvider service, ISetting<TrackerSetting> trackerSetting)
+    public EarthQuakeTracker(IEarthQuakeApiWrapper earthQuakeApi, IEarthQuakeCalculator earthQuakeCalculator,
+                             ISetting<CurrentPosition> currentPosition, ILogger<EarthQuakeTracker> logger,
+                             ISetting<AlertLimit> alertLimit,
+                             IServiceProvider service, ISetting<TrackerSetting> trackerSetting)
     {
         _earthQuakeApi = earthQuakeApi;
         _earthQuakeCalculator = earthQuakeCalculator;
@@ -54,18 +56,18 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         {
             await CheckEarthQuake(earthQuakeInfo).ConfigureAwait(false);
             await Task.Delay(_trackerSetting?.Setting?.TrackerTimeSpanMillisecond * 100 ?? 500, _cancellationToken)
-                .ConfigureAwait(false);
+                      .ConfigureAwait(false);
         }
     }
 
     private async Task CheckEarthQuake(EarthQuakeInfoBase earthQuakeInfo)
     {
         _logger.LogInformation("Checking earthquake at {Position} with DayMagnitude {DayMagnitude}",
-            earthQuakeInfo.PlaceName,
-            earthQuakeInfo.Magnitude);
+                               earthQuakeInfo.PlaceName,
+                               earthQuakeInfo.Magnitude);
         var infos = SimulateUpdates ??
                     await _earthQuakeApi.GetEarthQuakeInfo(earthQuakeInfo.Id,
-                        _cancellationToken);
+                                                           _cancellationToken);
         EarthQuakeInfoBase latestInfo;
         var timeHandler = _service.GetService<ITimeHandler>();
         if (SimulateTimeSpan == TimeSpan.Zero)
@@ -75,7 +77,8 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         else
         {
             _logger.LogWarning("Simulating with simulatingInfo");
-            var simulatingInfo = infos.FirstOrDefault(t => t.UpdateAt > DateTime.Now + timeHandler!.Offset - SimulateTimeSpan);
+            var simulatingInfo =
+                infos.FirstOrDefault(t => t.UpdateAt > DateTime.Now + timeHandler!.Offset - SimulateTimeSpan);
             if (infos.Count <= 0 && simulatingInfo == null) return;
             simulatingInfo ??= infos[^1];
             latestInfo = simulatingInfo;
@@ -85,8 +88,9 @@ public class EarthQuakeTracker : IEarthQuakeTracker
             _trackingInformation.TheoryCountDown + 30)
         {
             _logger.LogInformation("Earthquake Expired for {Time} but theory {Theory} Quitting.",
-                (DateTime.Now + timeHandler!.Offset - SimulateTimeSpan - latestInfo.UpdateAt).TotalSeconds,
-                _trackingInformation.TheoryCountDown + 30);
+                                   (DateTime.Now + timeHandler!.Offset - SimulateTimeSpan - latestInfo.UpdateAt)
+                                   .TotalSeconds,
+                                   _trackingInformation.TheoryCountDown + 30);
             _tokenSource?.Cancel(); // Expired Information
             return;
         }
@@ -110,7 +114,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                     _currentPosition.Setting.Longitude, _trackingInformation.Latitude, _trackingInformation.Longitude);
                 _trackingInformation.TheoryCountDown =
                     (int)_earthQuakeCalculator.GetCountDownSeconds(_trackingInformation.Depth,
-                        _trackingInformation.Distance);
+                                                                   _trackingInformation.Distance);
                 _trackingInformation.Intensity =
                     _earthQuakeCalculator.GetIntensity(_trackingInformation.Magnitude, _trackingInformation.Distance);
                 _trackingInformation.CountDown = (int)(_trackingInformation.TheoryCountDown -
@@ -133,7 +137,7 @@ public class EarthQuakeTracker : IEarthQuakeTracker
                     if (_alertLimit.Setting == null || !ShouldPopupAlert(_trackingInformation, _alertLimit.Setting))
                     {
                         _logger.LogTrace("The Limitation (M:{DayMagnitude},I:{Intensity}) is NOT reached, Retrying",
-                            _alertLimit.Setting?.DayMagnitude, _alertLimit.Setting?.DayIntensity);
+                                         _alertLimit.Setting?.DayMagnitude, _alertLimit.Setting?.DayIntensity);
                         return;
                     }
 
@@ -154,13 +158,13 @@ public class EarthQuakeTracker : IEarthQuakeTracker
     public static EarthQuakeStage GetEarthQuakeAlertStage(EarthQuakeTrackingInformation information)
     {
         return information.Intensity switch
-        {
-            >= 5 => EarthQuakeStage.Forced,
-            >= 3 and < 5 => EarthQuakeStage.Emergency,
-            >= 1 => EarthQuakeStage.Warning,
-            < 1 => EarthQuakeStage.Record,
-            _ => EarthQuakeStage.Record
-        };
+               {
+                   >= 5         => EarthQuakeStage.Forced,
+                   >= 3 and < 5 => EarthQuakeStage.Emergency,
+                   >= 1         => EarthQuakeStage.Warning,
+                   < 1          => EarthQuakeStage.Record,
+                   _            => EarthQuakeStage.Record
+               };
     }
 
     public static bool ShouldPopupAlert(EarthQuakeTrackingInformation information, AlertLimit alertLimit)

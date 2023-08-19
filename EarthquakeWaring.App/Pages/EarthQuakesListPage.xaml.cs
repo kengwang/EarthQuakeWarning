@@ -11,6 +11,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 using Button = Wpf.Ui.Controls.Button;
 
 namespace EarthquakeWaring.App.Pages;
@@ -19,7 +20,7 @@ public partial class EarthQuakesListPage : Page
 {
     private readonly ISetting<CurrentPosition> _currentPosition;
     private readonly ISetting<AlertLimit> _alertLimit;
-    private readonly IEarthQuakeApi _quakeApi;
+    private readonly IEarthQuakeApiWrapper _quakeApi;
     private readonly IEarthQuakeCalculator _calculator;
     private readonly IServiceProvider _service;
     private readonly EarthQuakesListPageViewModel _viewModel;
@@ -29,7 +30,7 @@ public partial class EarthQuakesListPage : Page
     {
         _service = DI.Services;
         _calculator = _service.GetRequiredService<IEarthQuakeCalculator>();
-        _quakeApi = _service.GetRequiredService<IEarthQuakeApi>();
+        _quakeApi = _service.GetRequiredService<IEarthQuakeApiWrapper>();
         _alertLimit = _service.GetRequiredService<ISetting<AlertLimit>>();
         _currentPosition = _service.GetRequiredService<ISetting<CurrentPosition>>();
 

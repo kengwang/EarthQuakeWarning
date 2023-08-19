@@ -9,6 +9,7 @@ public class UpdaterSetting : INotificationOption
 {
     private int _updateTimeSpanSecond = 5;
     private bool _showNotifyIcon = true;
+    private int _apiType = 0;
 
     public bool ShowNotifyIcon
     {
@@ -20,6 +21,12 @@ public class UpdaterSetting : INotificationOption
     {
         get => _updateTimeSpanSecond;
         set => SetField(ref _updateTimeSpanSecond, value);
+    }
+
+    public int ApiType
+    {
+        get => _apiType;
+        set => SetField(ref _apiType, value);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

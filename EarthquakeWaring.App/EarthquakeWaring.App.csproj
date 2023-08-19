@@ -32,7 +32,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Infrastructure\Models\ApiModels\" />
       <Folder Include="Tests" />
     </ItemGroup>
 

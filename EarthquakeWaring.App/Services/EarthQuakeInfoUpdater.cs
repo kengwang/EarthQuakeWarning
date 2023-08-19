@@ -7,12 +7,13 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 
 namespace EarthquakeWaring.App.Services;
 
 public class EarthQuakeInfoUpdater : INotificationHandler<HeartBeatNotification>, IEarthQuakeInfoUpdater
 {
-    private readonly IEarthQuakeApi _earthQuakeApi;
+    private readonly IEarthQuakeApiWrapper _earthQuakeApi;
     private readonly IServiceProvider _serviceProvider;
     private readonly ILogger<EarthQuakeInfoUpdater> _logger;
     private readonly ISetting<UpdaterSetting> _updaterSetting;
@@ -20,8 +21,8 @@ public class EarthQuakeInfoUpdater : INotificationHandler<HeartBeatNotification>
     private readonly Dictionary<IEarthQuakeTracker, CancellationTokenSource> _trackers = new();
     private int countDown = 0;
 
-    public EarthQuakeInfoUpdater(IEarthQuakeApi earthQuakeApi, IServiceProvider serviceProvider,
-        ILogger<EarthQuakeInfoUpdater> logger, ISetting<UpdaterSetting> updaterSetting)
+    public EarthQuakeInfoUpdater(IEarthQuakeApiWrapper earthQuakeApi, IServiceProvider serviceProvider,
+                                 ILogger<EarthQuakeInfoUpdater> logger, ISetting<UpdaterSetting> updaterSetting)
     {
         _earthQuakeApi = earthQuakeApi;
         _serviceProvider = serviceProvider;
