@@ -7,6 +7,6 @@ namespace EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 
 public interface IHttpRequester
 {
-    Task<string> GetString(string url, Dictionary<string, string>? data, CancellationToken cancellationToken);
-    Task<string> PostString(string url, HttpContent data, CancellationToken cancellationToken);
+    Task<string> GetString(string url, Dictionary<string, string>? data, CancellationToken cancellationToken = default);
+    Task<string> PostString(string url, HttpContent data, CancellationToken cancellationToken = default);
 }

@@ -14,7 +14,7 @@ public class HttpRequester : IHttpRequester
 
 
     public async Task<string> GetString(string url, Dictionary<string, string>? data,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken = default)
     {
         if (data != null)
         {
@@ -28,7 +28,7 @@ public class HttpRequester : IHttpRequester
     }
 
 
-    public async Task<string> PostString(string url, HttpContent content, CancellationToken cancellationToken)
+    public async Task<string> PostString(string url, HttpContent content, CancellationToken cancellationToken = default)
     {
         var response = await _httpClient.PostAsync(url, content, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();

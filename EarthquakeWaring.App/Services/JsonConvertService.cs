@@ -9,7 +9,8 @@ public class JsonConvertService : IJsonConvertService
 {
     public static readonly JsonSerializerOptions? JsonSerializerOptions = new JsonSerializerOptions
     {
-        Converters = { new JsonNumberToDatetimeConverter() }
+        Converters = { new JsonNumberToDatetimeConverter() },
+        NumberHandling = JsonNumberHandling.AllowReadingFromString | JsonNumberHandling.WriteAsString | JsonNumberHandling.AllowNamedFloatingPointLiterals
     };
 
     public T? ConvertTo<T>(string json)

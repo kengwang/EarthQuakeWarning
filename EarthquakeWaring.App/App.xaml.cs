@@ -17,6 +17,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using EarthquakeWaring.App.Services.EarthQuakeApis;
 
 namespace EarthquakeWaring.App
 {
@@ -82,6 +83,7 @@ namespace EarthquakeWaring.App
         {
             // For Background Services
             service.AddSingleton<IEarthQuakeCalculator, HuaniaEarthQuakeCalculator>();
+            service.AddSingleton<IEarthQuakeApi, SichuanEarthQuakeApi>();
             service.AddSingleton<IEarthQuakeApi, HuaniaEarthQuakeApi>();
             service.AddSingleton<IHttpRequester, HttpRequester>();
             service.AddTransient<IEarthQuakeTracker, EarthQuakeTracker>();

@@ -1,5 +1,4 @@
-﻿using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+﻿using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

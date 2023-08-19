@@ -1,5 +1,4 @@
-﻿using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+﻿using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using EarthquakeWaring.App.Windows;

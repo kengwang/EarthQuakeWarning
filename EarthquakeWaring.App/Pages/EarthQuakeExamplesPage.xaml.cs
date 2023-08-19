@@ -1,5 +1,4 @@
-﻿using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
-using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+﻿using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 using EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 using EarthquakeWaring.App.Infrastructure.Models.ViewModels;
 using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
@@ -14,6 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
+using EarthquakeWaring.App.Services.EarthQuakeApis;
 using Button = Wpf.Ui.Controls.Button;
 
 namespace EarthquakeWaring.App.Pages;
