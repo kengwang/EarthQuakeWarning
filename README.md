@@ -2,15 +2,17 @@
 
 基于 C# / WPF 的 地震预警 软件
 
-API / 计算数据 自：[成都高新减灾研究所](http://www.365icl.com/) / [成都市美幻科技有限公司](http://www.huania.com/) 的 [地震预警](https://download.chinaeew.cn/mobile)
-
 **本软件仅供学习交流使用，请勿用于生产环境，下载后请在 24 小时内删除**
 
 **请勿传播或进行二次分享**
 
+如果此软件侵犯了您的权益，请发 Issue 或 联系我 [gh-eqw-abuse@kengwang.com.cn](mailto:gh-eqw-abuse@kengwang.com.cn)
+
+作者将会尽快处理
+
 ## 免责声明
 
-由于部分常量与官方 APP 取值稍有出入，可能导致部分数据有偏差，请以官方为准。
+由于部分常量与官方稍有出入，可能导致部分数据有偏差，请以官方为准。
 
 请勿完全依赖此软件，由于依赖此软件造成的问题作者概不负责。
 
@@ -26,10 +28,17 @@ API / 计算数据 自：[成都高新减灾研究所](http://www.365icl.com/) /
 * microsoft/webview2: [https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/](https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/)
 * 高德地图 Uri Api: [https://lbs.amap.com/api/uri-api](https://lbs.amap.com/api/uri-api)
 * 百度坐标拾取系统: [https://api.map.baidu.com/lbsapi/getpoint/](https://api.map.baidu.com/lbsapi/getpoint/)
+* Vanara.PInvoke.Kernel32: [https://github.com/dahall/Vanara](https://github.com/dahall/Vanara)
+* SharpGIS.NmeaParser: [https://github.com/dotMorten/NmeaParser](https://github.com/dotMorten/NmeaParser)
+* NAudio: [https://github.com/naudio/NAudio](https://github.com/naudio/NAudio)
+* GuerrillaNtp: [https://github.com/robertvazan/guerrillantp](https://github.com/robertvazan/guerrillantp)
 
-如果此软件侵犯了您的权益，请发 Issue 或 联系我 [hi@kengwang.com.cn](mailto:hi@kengwang.com.cn)
 
-作者将会尽快处理
+## API 源 使用
+
+* [成都高新减灾研究所](http://www.365icl.com/) / [成都市美幻科技有限公司](http://www.huania.com/) 的 [地震预警](https://download.chinaeew.cn/mobile)
+* [四川地震局](https://www.scdzj.gov.cn/)
+* [Wolfx 的 减灾 API](https://api.wolfx.jp/)
 
 ## Licence
 
@@ -37,7 +46,7 @@ API / 计算数据 自：[成都高新减灾研究所](http://www.365icl.com/) /
 
 ```
     EarthQuakeWarning.App
-    Copyright (C) 2022  Kengwang
+    Copyright (C) 2023  Kengwang
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
