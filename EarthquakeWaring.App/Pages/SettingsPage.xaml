@@ -305,7 +305,7 @@
         </wpfui:CardControl>
         <wpfui:CardControl
             Margin="0,12,0,0"
-            Icon="ContractDownLeft24">
+            Icon="ArrowTrendingText24">
             <wpfui:CardControl.Header>
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="选择使用的 API 服务" FontWeight="Bold"/>
@@ -321,7 +321,7 @@
         </wpfui:CardControl>
         <wpfui:CardControl
             Margin="0,12,0,0"
-            Icon="ArrowTrendingText24">
+            Icon="ContractDownLeft24">
             <wpfui:CardControl.Header>
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="显示后台通知区域图标" FontWeight="Bold"/>

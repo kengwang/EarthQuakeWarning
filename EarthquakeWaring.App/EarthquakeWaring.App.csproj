@@ -12,6 +12,7 @@
         <FileVersion>1.0.7.0</FileVersion>
         <NeutralLanguage>zh-Hans</NeutralLanguage>
         <UseWindowsForms>True</UseWindowsForms>
+        <PackageIcon>original.ico</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -38,6 +39,10 @@
     <ItemGroup>
       <None Update="Icons\radio.ico">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="original.ico">
+        <Pack>True</Pack>
+        <PackagePath></PackagePath>
       </None>
     </ItemGroup>
 
