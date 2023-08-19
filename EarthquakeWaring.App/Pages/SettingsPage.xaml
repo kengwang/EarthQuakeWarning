@@ -315,6 +315,8 @@
             <ComboBox SelectedIndex="{Binding UpdateSetting.Setting.ApiType, Mode=TwoWay}" >
                 <ComboBoxItem>成都高新减灾研究所</ComboBoxItem>
                 <ComboBoxItem>四川地震局</ComboBoxItem>
+                <ComboBoxItem>Wolfx API (四川地震局)</ComboBoxItem>
+                <ComboBoxItem>Wolfx API (中国地震台网)</ComboBoxItem>
             </ComboBox>
         </wpfui:CardControl>
         <wpfui:CardControl

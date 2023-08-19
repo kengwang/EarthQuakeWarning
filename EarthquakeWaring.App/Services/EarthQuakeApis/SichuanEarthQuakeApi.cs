@@ -38,7 +38,7 @@ public class SichuanEarthQuakeApi : IEarthQuakeApi
                                                         {
                                                             { "orderType", "1" },
                                                             { "pageNo", "1" },
-                                                            { "pageSize", startTimePointer != 0 ? "1" : "20" }
+                                                            { "pageSize", "20" }
                                                         }, cancellationToken);
             var ret = _jsonConvertService.ConvertTo<SichuanEarthQuakeApiListResponse>(result);
             if (ret?.Code != 0)
@@ -46,7 +46,9 @@ public class SichuanEarthQuakeApi : IEarthQuakeApi
                 throw new Exception($"Return with code {ret?.Message} ({ret?.Code})");
             }
 
-            return ret.Data?.Select(t => t.MapToEarthQuakeInfo()).ToList() ?? new List<EarthQuakeInfoBase>();
+            if (ret.Data is null)
+                return new List<EarthQuakeInfoBase>();
+            return ret.Data.Select(t => t.MapToEarthQuakeInfo()).Where(t=>DateTimeOffset.FromFileTime(t.UpdateAt.ToFileTime()).ToUnixTimeMilliseconds() >= startTimePointer).ToList();
         }
         catch (Exception e)
         {
@@ -60,8 +62,6 @@ public class SichuanEarthQuakeApi : IEarthQuakeApi
     {
         try
         {
-
-            //http://118.113.105.29:8002/api/earlywarning/getEarlywarningInfo?id=7564
             var result = await _httpRequester.GetString(ApiUrl + "earlywarning/getEarlywarningInfo",
                                                         new Dictionary<string, string>()
                                                         {
@@ -135,7 +135,7 @@ public static class SichuanEarthQuakeApiDataToEarthQuakeInfoMapper
                    Latitude = item.Latitude,
                    Longitude = item.Longitude,
                    Magnitude = item.Magnitude,
-                   Depth = -1,
+                   Depth = 0,
                    PlaceName = item.PlaceName
                };
     }

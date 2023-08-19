@@ -62,9 +62,17 @@ public class EarthQuakeTracker : IEarthQuakeTracker
 
     private async Task CheckEarthQuake(EarthQuakeInfoBase earthQuakeInfo)
     {
-        _logger.LogInformation("Checking earthquake at {Position} with DayMagnitude {DayMagnitude}",
-                               earthQuakeInfo.PlaceName,
+        _logger.LogInformation("Checking earthquake shocking at {Time} at {Position} with Magnitude {DayMagnitude}",
+                              earthQuakeInfo.StartAt,
+                              earthQuakeInfo.PlaceName,
                                earthQuakeInfo.Magnitude);
+        if (SimulateUpdates is null && (DateTime.Now - earthQuakeInfo.StartAt).TotalMinutes > 5)
+        {
+            _logger.LogWarning("Earthquake Expired 5 minutes, exit");
+            _tokenSource?.Cancel();
+            return;
+        }
+            
         var infos = SimulateUpdates ??
                     await _earthQuakeApi.GetEarthQuakeInfo(earthQuakeInfo.Id,
                                                            _cancellationToken);
