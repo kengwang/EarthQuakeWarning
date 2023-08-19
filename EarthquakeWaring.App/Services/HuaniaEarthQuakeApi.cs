@@ -4,8 +4,10 @@ using EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
 
 namespace EarthquakeWaring.App.Services;
 
@@ -24,7 +26,7 @@ public class HuaniaEarthQuakeApi : IEarthQuakeApi
         _logger = logger;
     }
 
-    public async Task<List<HuaniaEarthQuake>> GetEarthQuakeList(long startPointer, CancellationToken cancellationToken)
+    public async Task<List<EarthQuakeInfoBase>> GetEarthQuakeList(long startPointer, CancellationToken cancellationToken)
     {
         try
         {
@@ -33,17 +35,17 @@ public class HuaniaEarthQuakeApi : IEarthQuakeApi
                     cancellationToken).ConfigureAwait(false));
             if (response?.Code != 0)
                 throw new Exception(response?.Message);
-            return response.Data;
+            return response.Data.Select(t=>t.MapToEarthQuakeInfo()).ToList();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Error while calling Huania Api");
         }
 
-        return new List<HuaniaEarthQuake>();
+        return new ();
     }
 
-    public async Task<List<EarthQuakeUpdate>> GetEarthQuakeInfo(long earthQuakeId, CancellationToken cancellationToken)
+    public async Task<List<EarthQuakeInfoBase>> GetEarthQuakeInfo(string earthQuakeId, CancellationToken cancellationToken)
     {
         try
         {
@@ -52,12 +54,12 @@ public class HuaniaEarthQuakeApi : IEarthQuakeApi
                     cancellationToken));
             if (response?.Code != 0)
                 throw new Exception(response?.Message);
-            return response.Data;
+            return response.Data.Select(t=>t.MapToEarthQuakeInfo()).ToList();
         }
         catch (Exception e)
         {
             _logger.LogError(e, "Error while calling Huania Api");
         }
-        return new List<EarthQuakeUpdate>();
+        return new ();
     }
 }

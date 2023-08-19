@@ -13,11 +13,10 @@ public class EarthQuakeTrackingInformation : INotifyPropertyChanged
     private double _intensity;
     private int _countDown;
     private DateTime _updateTime;
-    private long _eventId;
+    private string _id;
     private double _latitude;
     private double _longitude;
     private double _depth;
-    private long _sations;
     private double _distance;
     private int _theoryCountDown;
     private EarthQuakeStage _stage;
@@ -54,17 +53,11 @@ public class EarthQuakeTrackingInformation : INotifyPropertyChanged
         set => SetField(ref _depth, value);
     }
 
-    public long Sations
-    {
-        get => _sations;
-        set => SetField(ref _sations, value);
-    }
 
-
-    public long EventId
+    public string Id
     {
-        get => _eventId;
-        set => SetField(ref _eventId, value);
+        get => _id;
+        set => SetField(ref _id, value);
     }
 
 

@@ -38,7 +38,7 @@ public class EarthQuakeInfoUpdater : INotificationHandler<HeartBeatNotification>
         if (quakeList.Count <= 0) return;
         foreach (var earthQuake in quakeList)
         {
-            _logger.LogInformation("Tracking earthquake at {Position} with DayMagnitude {DayMagnitude}", earthQuake.Epicenter,
+            _logger.LogInformation("Tracking earthquake at {Position} with DayMagnitude {DayMagnitude}", earthQuake.PlaceName,
                 earthQuake.Magnitude);
             var tracker = _serviceProvider.GetService<IEarthQuakeTracker>();
             var trackCancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);

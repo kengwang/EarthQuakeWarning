@@ -41,6 +41,7 @@ namespace EarthquakeWaring.App
 
         private static void ConfigureLogging(ILoggingBuilder loggingBuilder)
         {
+            loggingBuilder.ClearProviders();
             loggingBuilder.AddSerilog(new LoggerConfiguration()
 #if DEBUG
                 .WriteTo.Console()

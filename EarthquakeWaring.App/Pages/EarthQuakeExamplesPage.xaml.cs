@@ -13,6 +13,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
 using Button = Wpf.Ui.Controls.Button;
 
 namespace EarthquakeWaring.App.Pages;
@@ -48,13 +49,13 @@ public partial class EarthQuakeExamplesPage : Page
     protected override void OnInitialized(EventArgs e)
     {
         base.OnInitialized(e);
-        var results = _jsonConvert.ConvertTo<List<HuaniaEarthQuake>>(Examples);
+        var results = _jsonConvert.ConvertTo<List<HuaniaEarthQuakeDto>>(Examples);
         results = results?.GroupBy(t => t.EventId).Select(g => g.Last()).ToList();
         results?.ForEach(t => _viewModel.InformationList.Add(ConvertToInformation(t)));
         ListView.ItemsSource = _viewModel.InformationList;
     }
 
-    private EarthQuakeTrackingInformation ConvertToInformation(HuaniaEarthQuake latestInfo)
+    private EarthQuakeTrackingInformation ConvertToInformation(HuaniaEarthQuakeDto latestInfo)
     {
         var trackingInformation = new EarthQuakeTrackingInformation
         {
@@ -65,8 +66,7 @@ public partial class EarthQuakeExamplesPage : Page
             Depth = latestInfo.Depth,
             Latitude = latestInfo.Latitude,
             Longitude = latestInfo.Longitude,
-            EventId = latestInfo.EventId,
-            Sations = latestInfo.Sations,
+            Id = latestInfo.EventId.ToString(),
             Magnitude = latestInfo.Magnitude
         };
 
@@ -92,16 +92,16 @@ public partial class EarthQuakeExamplesPage : Page
         var tracker = _service.GetService<IEarthQuakeTracker>();
         var timeHandler = _service.GetService<ITimeHandler>();
         tracker!.SimulateTimeSpan = DateTime.Now + timeHandler!.Offset - info.StartTime;
-        var results = _jsonConvert.ConvertTo<List<EarthQuakeUpdate>>(Examples);
-        tracker!.SimulateUpdates = results?.Where(t => t.EventId == info.EventId).Select(t =>
+        var results = _jsonConvert.ConvertTo<List<HuaniaEarthQuakeDto>>(Examples)?.Select(t=>t.MapToEarthQuakeInfo())?.ToList();
+        tracker!.SimulateUpdates = results?.Where(t => t.Id == info.Id).Select(t =>
         {
             t.StartAt = t.StartAt.AddHours(16);
             t.UpdateAt = t.UpdateAt.AddHours(16);
             return t;
         }).ToList();
-        tracker?.StartTrack(new HuaniaEarthQuake()
+        tracker?.StartTrack(new EarthQuakeInfoBase()
         {
-            EventId = info.EventId
+            Id = info.Id
         }, cancellationTokenSource);
     }
 

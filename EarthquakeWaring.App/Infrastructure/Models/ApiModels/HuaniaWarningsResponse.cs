@@ -9,5 +9,5 @@ public class HuaniaWarningsResponse
 
     [JsonPropertyName("message")] public string Message { get; set; }
 
-    [JsonPropertyName("data")] public List<HuaniaEarthQuake> Data { get; set; }
+    [JsonPropertyName("data")] public List<HuaniaEarthQuakeDto> Data { get; set; }
 }

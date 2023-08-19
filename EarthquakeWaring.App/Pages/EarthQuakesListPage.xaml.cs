@@ -51,19 +51,18 @@ public partial class EarthQuakesListPage : Page
         LoadingRing.Visibility = Visibility.Collapsed;
     }
 
-    private EarthQuakeTrackingInformation ConvertToInformation(HuaniaEarthQuake latestInfo)
+    private EarthQuakeTrackingInformation ConvertToInformation(EarthQuakeInfoBase latestInfo)
     {
         var trackingInformation = new EarthQuakeTrackingInformation
         {
             // Update the tracking information
-            Position = latestInfo.Epicenter,
+            Position = latestInfo.PlaceName ?? "未知地点",
             StartTime = latestInfo.StartAt,
             UpdateTime = latestInfo.UpdateAt,
             Depth = latestInfo.Depth,
             Latitude = latestInfo.Latitude,
             Longitude = latestInfo.Longitude,
-            EventId = latestInfo.EventId,
-            Sations = latestInfo.Sations,
+            Id = latestInfo.Id,
             Magnitude = latestInfo.Magnitude
         };
 
@@ -89,10 +88,10 @@ public partial class EarthQuakesListPage : Page
         var tracker = _service.GetService<IEarthQuakeTracker>();
         var timeHandler = _service.GetService<ITimeHandler>();
         tracker!.SimulateTimeSpan = DateTime.Now + timeHandler!.Offset - info.StartTime;
-        tracker!.SimulateUpdates = await _quakeApi.GetEarthQuakeInfo(info.EventId, cancellationTokenSource.Token);
-        tracker?.StartTrack(new HuaniaEarthQuake()
+        tracker!.SimulateUpdates = await _quakeApi.GetEarthQuakeInfo(info.Id, cancellationTokenSource.Token);
+        tracker?.StartTrack(new EarthQuakeInfoBase()
         {
-            EventId = info.EventId
+            Id = info.Id
         }, cancellationTokenSource);
     }
 

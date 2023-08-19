@@ -45,29 +45,29 @@ public class EarthQuakeTracker : IEarthQuakeTracker
     }
 
     public TimeSpan SimulateTimeSpan { get; set; } = TimeSpan.Zero;
-    public List<EarthQuakeUpdate>? SimulateUpdates { get; set; } = null;
+    public List<EarthQuakeInfoBase>? SimulateUpdates { get; set; } = null;
 
-    public async Task StartTrack(HuaniaEarthQuake huaniaEarthQuake, CancellationTokenSource cancellationTokenSource)
+    public async Task StartTrack(EarthQuakeInfoBase earthQuakeInfo, CancellationTokenSource cancellationTokenSource)
     {
         _tokenSource = cancellationTokenSource;
         _cancellationToken = cancellationTokenSource.Token;
         while (!cancellationTokenSource.Token.IsCancellationRequested)
         {
-            await CheckEarthQuake(huaniaEarthQuake).ConfigureAwait(false);
+            await CheckEarthQuake(earthQuakeInfo).ConfigureAwait(false);
             await Task.Delay(_trackerSetting?.Setting?.TrackerTimeSpanMillisecond * 100 ?? 500, _cancellationToken)
                 .ConfigureAwait(false);
         }
     }
 
-    private async Task CheckEarthQuake(HuaniaEarthQuake huaniaEarthQuake)
+    private async Task CheckEarthQuake(EarthQuakeInfoBase earthQuakeInfo)
     {
         _logger.LogInformation("Checking earthquake at {Position} with DayMagnitude {DayMagnitude}",
-            huaniaEarthQuake.Epicenter,
-            huaniaEarthQuake.Magnitude);
+            earthQuakeInfo.PlaceName,
+            earthQuakeInfo.Magnitude);
         var infos = SimulateUpdates ??
-                    await _earthQuakeApi.GetEarthQuakeInfo(huaniaEarthQuake.EventId,
+                    await _earthQuakeApi.GetEarthQuakeInfo(earthQuakeInfo.Id,
                         _cancellationToken);
-        EarthQuakeUpdate latestInfo;
+        EarthQuakeInfoBase latestInfo;
         var timeHandler = _service.GetService<ITimeHandler>();
         if (SimulateTimeSpan == TimeSpan.Zero)
         {
@@ -95,14 +95,13 @@ public class EarthQuakeTracker : IEarthQuakeTracker
         Application.Current.Dispatcher.Invoke(() =>
         {
             // Update the tracking information
-            _trackingInformation.Position = latestInfo.Epicenter;
+            _trackingInformation.Position = latestInfo.PlaceName;
             _trackingInformation.StartTime = latestInfo.StartAt;
             _trackingInformation.UpdateTime = latestInfo.UpdateAt;
             _trackingInformation.Depth = latestInfo.Depth;
             _trackingInformation.Latitude = latestInfo.Latitude;
             _trackingInformation.Longitude = latestInfo.Longitude;
-            _trackingInformation.EventId = latestInfo.EventId;
-            _trackingInformation.Sations = latestInfo.Sations;
+            _trackingInformation.Id = latestInfo.Id;
             _trackingInformation.Magnitude = latestInfo.Magnitude;
 
 

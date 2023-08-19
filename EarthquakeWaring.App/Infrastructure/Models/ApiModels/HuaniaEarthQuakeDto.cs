@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
+using EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
 
-namespace EarthquakeWaring.App.Infrastructure.Models.EarthQuakeModels;
+namespace EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 
-public class EarthQuakeUpdate
+public class HuaniaEarthQuakeDto
 {
     [JsonPropertyName("eventId")]
     public long EventId { get; set; }
@@ -37,4 +39,21 @@ public class EarthQuakeUpdate
 
     [JsonPropertyName("sations")]
     public long Sations { get; set; }
+}
+
+public static class HuaniaEarthQuakeToEarthQuakeInfoMapper
+{
+    public static EarthQuakeInfoBase MapToEarthQuakeInfo(this HuaniaEarthQuakeDto earthQuake)
+    {
+        return new EarthQuakeInfoBase
+               {
+                   Id = earthQuake.EventId.ToString(),
+                   StartAt = earthQuake.StartAt,
+                   Latitude = earthQuake.Latitude,
+                   Longitude = earthQuake.Longitude,
+                   Magnitude = earthQuake.Magnitude,
+                   Depth = earthQuake.Depth,
+                   PlaceName = earthQuake.Epicenter
+               };
+    }
 }
