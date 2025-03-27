@@ -33,13 +33,15 @@ public class SichuanEarthQuakeApi : IEarthQuakeApi
     {
         try
         {
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            cts.CancelAfter(5000);
             var result = await _httpRequester.GetString(ApiUrl + "earlywarning/jsonPageList",
                                                         new Dictionary<string, string>()
                                                         {
                                                             { "orderType", "1" },
                                                             { "pageNo", "1" },
                                                             { "pageSize", "20" }
-                                                        }, cancellationToken);
+                                                        }, cts.Token);
             var ret = _jsonConvertService.ConvertTo<SichuanEarthQuakeApiListResponse>(result);
             if (ret?.Code != 0)
             {
@@ -53,8 +55,9 @@ public class SichuanEarthQuakeApi : IEarthQuakeApi
         catch (Exception e)
         {
             _logger.LogError(e, "Error while calling Sichuan EarthQuake Api");
-            throw;
         }
+
+        return new List<EarthQuakeInfoBase>();
     }
 
     public async Task<List<EarthQuakeInfoBase>> GetEarthQuakeInfo(string earthQuakeId,
@@ -78,8 +81,9 @@ public class SichuanEarthQuakeApi : IEarthQuakeApi
         catch (Exception e)
         {
             _logger.LogError(e, "Error while calling Sichuan EarthQuake Api");
-            throw;
         }
+
+        return new List<EarthQuakeInfoBase>();
     }
 }
 

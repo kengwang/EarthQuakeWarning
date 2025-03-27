@@ -33,9 +33,11 @@ public class HuaniaEarthQuakeApi : IEarthQuakeApi
     {
         try
         {
+            var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+            cts.CancelAfter(5000);
             var response = _jsonConvert.ConvertTo<HuaniaWarningsResponse>(
                 await _httpRequester.GetString(HuaniaApi + "earlywarnings?updates=3&start_at=" + startPointer, null,
-                                               cancellationToken).ConfigureAwait(false));
+                    cts.Token).ConfigureAwait(false));
             if (response?.Code != 0)
                 throw new Exception(response?.Message);
             return response.Data.Select(t => t.MapToEarthQuakeInfo()).ToList();

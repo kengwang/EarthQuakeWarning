@@ -26,7 +26,9 @@ public class WolfxCencApi : IEarthQuakeApi
     
     public async Task<List<EarthQuakeInfoBase>> GetEarthQuakeList(long startTimePointer, CancellationToken cancellationToken)
     {
-        var result = await _httpRequester.GetString(ApiUrl, cancellationToken: cancellationToken);
+        var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts.CancelAfter(5000);
+        var result = await _httpRequester.GetString(ApiUrl, cancellationToken: cts.Token);
         result = Regex.Replace(result, ",\\s?\"md5\"\\s?:\\s?\".*\"", string.Empty);
         var ret = _jsonConvertService.ConvertTo<Dictionary<string,WolfxCencItem>>(result);
         if (ret is null)

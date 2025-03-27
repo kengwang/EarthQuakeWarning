@@ -44,7 +44,7 @@ public partial class EarthQuakesListPage : Page
         _viewModel.ProgressRingVisibility = Visibility.Visible;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
-        var results = await _quakeApi.GetEarthQuakeList(0, cancellationToken);
+        var results = await _quakeApi.GetEarthQuakeList(1, cancellationToken);
         results.ForEach(t => _viewModel.InformationList.Add(ConvertToInformation(t)));
         ListView.ItemsSource = _viewModel.InformationList;
         _viewModel.ProgressRingVisibility = Visibility.Collapsed;

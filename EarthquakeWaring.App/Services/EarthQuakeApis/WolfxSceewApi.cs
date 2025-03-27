@@ -23,7 +23,9 @@ public class WolfxSceewApi : IEarthQuakeApi
     public async Task<List<EarthQuakeInfoBase>> GetEarthQuakeList(long startTimePointer,
                                                                   CancellationToken cancellationToken)
     {
-        var result = await _httpRequester.GetString(ApiUrl, null, cancellationToken);
+        var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        cts.CancelAfter(5000);
+        var result = await _httpRequester.GetString(ApiUrl, null, cts.Token);
         var ret = _jsonConvertService.ConvertTo<WolfxSceewResponse>(result);
         if (ret is null)
             return new List<EarthQuakeInfoBase>();
