@@ -27,7 +27,7 @@
 * serilog/serilog: [https://github.com/serilog/serilog](https://github.com/serilog/serilog)
 * microsoft/webview2: [https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/](https://developer.microsoft.com/zh-cn/microsoft-edge/webview2/)
 * 高德地图 Uri Api: [https://lbs.amap.com/api/uri-api](https://lbs.amap.com/api/uri-api)
-* 百度坐标拾取系统: [https://api.map.baidu.com/lbsapi/getpoint/](https://api.map.baidu.com/lbsapi/getpoint/)
+* 腾讯地图拾取系统: [https://lbs.qq.com/getPoint/](https://lbs.qq.com/getPoint/)
 * Vanara.PInvoke.Kernel32: [https://github.com/dahall/Vanara](https://github.com/dahall/Vanara)
 * SharpGIS.NmeaParser: [https://github.com/dotMorten/NmeaParser](https://github.com/dotMorten/NmeaParser)
 * NAudio: [https://github.com/naudio/NAudio](https://github.com/naudio/NAudio)

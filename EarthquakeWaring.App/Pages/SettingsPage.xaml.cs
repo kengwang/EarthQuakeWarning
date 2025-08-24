@@ -35,7 +35,7 @@ public partial class SettingsPage : Page
 
     private void OpenPositionSelector(object sender, RoutedEventArgs e)
     {
-        Process.Start("explorer.exe", "https://api.map.baidu.com/lbsapi/getpoint/");
+        Process.Start("explorer.exe", "https://lbs.qq.com/getPoint/");
     }
 
     private void ToggleButton_OnChecked(object sender, RoutedEventArgs e)
