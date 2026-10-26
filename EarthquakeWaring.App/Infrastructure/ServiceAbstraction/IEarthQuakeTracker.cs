@@ -3,14 +3,17 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using EarthquakeWaring.App.Infrastructure.Models.BaseModels;
+using System.Threading.Channels;
 
 namespace EarthquakeWaring.App.Infrastructure.ServiceAbstraction;
 
 public interface IEarthQuakeTracker
 {
     public TimeSpan SimulateTimeSpan { get; set; }
-    public List<EarthQuakeInfoBase>? SimulateUpdates { get; set; }
+    public IReadOnlyList<EarthquakeReport>? SimulateReports { get; set; }
 
-    Task StartTrack(EarthQuakeInfoBase earthQuakeInfo, CancellationTokenSource cancellationToken);
+    Task TrackAsync(
+        EarthquakeReport initialReport,
+        ChannelReader<EarthquakeReport> updates,
+        CancellationToken cancellationToken);
 }

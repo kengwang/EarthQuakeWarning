@@ -17,8 +17,8 @@ using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
-using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 using EarthquakeWaring.App.Services.EarthQuakeApis;
+using EarthquakeWaring.App.Services.EarthQuakeSources;
 
 namespace EarthquakeWaring.App
 {
@@ -80,20 +80,53 @@ namespace EarthquakeWaring.App
             Host.RunAsync();
         }
 
+        protected override void OnExit(ExitEventArgs e)
+        {
+            try
+            {
+                Host.StopAsync(TimeSpan.FromSeconds(5)).GetAwaiter().GetResult();
+            }
+            finally
+            {
+                Host.Dispose();
+                base.OnExit(e);
+            }
+        }
+
         public static void ConfigureServices(IServiceCollection service)
         {
             // For Background Services
             service.AddSingleton<IEarthQuakeCalculator, HuaniaEarthQuakeCalculator>();
-            service.AddSingleton<IEarthQuakeApi, HuaniaEarthQuakeApi>();
-            service.AddSingleton<IEarthQuakeApi, SichuanEarthQuakeApi>();
-            service.AddSingleton<IEarthQuakeApi, WolfxSceewApi>();
-            service.AddSingleton<IEarthQuakeApi, WolfxCencApi>();
-            service.AddSingleton<IEarthQuakeApi, MiuiEarthQuakeApi>();
-            service.AddSingleton<IEarthQuakeApiWrapper, EarthQuakeApiWrapper>();
+            service.AddSingleton<HuaniaEarthQuakeApi>();
+            service.AddSingleton<SichuanEarthQuakeApi>();
+            service.AddSingleton<WolfxSceewApi>();
+            service.AddSingleton<WolfxCencApi>();
+            service.AddSingleton<MiuiEarthQuakeApi>();
+            service.AddSingleton<CencEarthQuakeApi>();
+            service.AddSingleton<CencRapidEarthQuakeApi>();
+            service.AddSingleton<IEarthQuakeApi>(provider => provider.GetRequiredService<HuaniaEarthQuakeApi>());
+            service.AddSingleton<IEarthQuakeApi>(provider => provider.GetRequiredService<SichuanEarthQuakeApi>());
+            service.AddSingleton<IEarthQuakeApi>(provider => provider.GetRequiredService<WolfxSceewApi>());
+            service.AddSingleton<IEarthQuakeApi>(provider => provider.GetRequiredService<WolfxCencApi>());
+            service.AddSingleton<IEarthQuakeApi>(provider => provider.GetRequiredService<MiuiEarthQuakeApi>());
+            service.AddSingleton<IEarthQuakeApi>(provider => provider.GetRequiredService<CencEarthQuakeApi>());
+            service.AddSingleton<IEarthQuakeApi>(provider => provider.GetRequiredService<CencRapidEarthQuakeApi>());
+            service.AddHttpClient("Wolfx", client =>
+            {
+                client.BaseAddress = new Uri("https://api.wolfx.jp/");
+                client.Timeout = TimeSpan.FromSeconds(10);
+            });
+            service.AddSingleton<WolfxMessageParser>();
+            service.AddSingleton<IWolfxReportCache, WolfxReportCache>();
+            service.AddSingleton<WolfxHttpQuerySource>();
+            service.AddSingleton<WolfxWebSocketRealtimeSource>();
+            service.AddSingleton<WolfxWebSocketApi>();
+            service.AddSingleton<IEarthquakeSourceCatalog, EarthquakeSourceCatalog>();
             service.AddSingleton<IHttpRequester, HttpRequester>();
             service.AddTransient<IEarthQuakeTracker, EarthQuakeTracker>();
             service.AddSingleton<INotificationPublisher, NotificationPublisher>();
-            service.AddSingleton<INotificationHandler<HeartBeatNotification>, EarthQuakeInfoUpdater>();
+            service.AddSingleton<EarthQuakeInfoUpdater>();
+            service.AddSingleton<IEarthQuakeInfoUpdater>(provider => provider.GetRequiredService<EarthQuakeInfoUpdater>());
             service.AddSingleton<IJsonConvertService, JsonConvertService>();
             service.AddSingleton(typeof(ISetting<>), typeof(FileJsonSetting<>));
             service.AddSingleton<ITimeHandler, TimeManager>();
@@ -110,7 +143,7 @@ namespace EarthquakeWaring.App
 
             service.AddSingleton<ITrayIconHolder, TrayIconHolder>();
 
-            service.AddHostedService<HeartBeatBackgroundService>();
+            service.AddHostedService(provider => provider.GetRequiredService<EarthQuakeInfoUpdater>());
             service.AddSingleton<IVolumeManager, VolumeManager>();
         }
     }

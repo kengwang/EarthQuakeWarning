@@ -7,9 +7,10 @@
         <UseWPF>true</UseWPF>
         <LangVersion>preview</LangVersion>
         <IsPackable>false</IsPackable>
-        <PackageVersion>1.1.1</PackageVersion>
-        <AssemblyVersion>1.1.1.0</AssemblyVersion>
-        <FileVersion>1.1.1.0</FileVersion>
+        <Version>1.2.0</Version>
+        <PackageVersion>1.2.0</PackageVersion>
+        <AssemblyVersion>1.2.0.0</AssemblyVersion>
+        <FileVersion>1.2.0.0</FileVersion>
         <NeutralLanguage>zh-Hans</NeutralLanguage>
         <UseWindowsForms>True</UseWindowsForms>
         <PackageIcon>original.ico</PackageIcon>
@@ -19,6 +20,7 @@
       <PackageReference Include="GuerrillaNtp" Version="3.1.0" />
       <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Http" Version="7.0.0" />
       <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.1901.177" />
       <PackageReference Include="NAudio.Core" Version="2.1.0" />
       <PackageReference Include="NAudio.Wasapi" Version="2.1.0" />

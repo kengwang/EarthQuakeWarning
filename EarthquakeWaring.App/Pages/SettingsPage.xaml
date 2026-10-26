@@ -180,7 +180,8 @@
         </wpfui:CardExpander>
         <wpfui:CardControl
             Margin="0,12,0,0"
-            Icon="History24">
+            Icon="History24"
+            IsEnabled="{Binding IsPollingSource}">
             <wpfui:CardControl.Header>
                 <StackPanel Orientation="Vertical">
                     <TextBlock Text="检测时间间隔" FontWeight="Bold"/>
@@ -312,13 +313,11 @@
                     <TextBlock Text="我们支持多种上游 API 来获取地震信息" FontWeight="Light"/>
                 </StackPanel>
             </wpfui:CardControl.Header>
-            <ComboBox SelectedIndex="{Binding UpdateSetting.Setting.ApiType, Mode=TwoWay}" >
-                <ComboBoxItem>成都高新减灾研究所</ComboBoxItem>
-                <ComboBoxItem>四川地震局</ComboBoxItem>
-                <ComboBoxItem>Wolfx API (四川地震局)</ComboBoxItem>
-                <ComboBoxItem>Wolfx API (中国地震台网)</ComboBoxItem>
-                <ComboBoxItem>MIUI 预警</ComboBoxItem>
-            </ComboBox>
+            <ComboBox
+                ItemsSource="{Binding EarthquakeSources}"
+                DisplayMemberPath="DisplayName"
+                SelectedValuePath="Id"
+                SelectedValue="{Binding UpdateSetting.Setting.SourceId, Mode=TwoWay}" />
         </wpfui:CardControl>
         <wpfui:CardControl
             Margin="0,12,0,0"

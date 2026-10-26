@@ -40,6 +40,8 @@
 * [四川地震局](https://www.scdzj.gov.cn/)
 * [Wolfx 的 减灾 API](https://api.wolfx.jp/)
 * MIUI 地震预警
+* Wolfx WebSocket 实时预警与 HTTP 历史查询
+* 中国地震台网 CENC HTTP：正式报、速报
 
 ## Licence
 

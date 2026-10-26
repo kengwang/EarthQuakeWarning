@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Text.Json.Serialization;
 
 namespace EarthquakeWaring.App.Infrastructure.Models.SettingModels;
 
@@ -9,7 +10,8 @@ public class UpdaterSetting : INotificationOption
 {
     private int _updateTimeSpanSecond = 5;
     private bool _showNotifyIcon = true;
-    private int _apiType = 0;
+    private string? _sourceId;
+    private int? _apiType;
 
     public bool ShowNotifyIcon
     {
@@ -23,10 +25,32 @@ public class UpdaterSetting : INotificationOption
         set => SetField(ref _updateTimeSpanSecond, value);
     }
 
-    public int ApiType
+    public string SourceId
     {
-        get => _apiType;
-        set => SetField(ref _apiType, value);
+        get
+        {
+            if (_sourceId is not null) return _sourceId;
+            _sourceId = EarthquakeSourceIds.FromLegacyIndex(_apiType ?? 0);
+            _apiType = null;
+            return _sourceId;
+        }
+        set
+        {
+            if (string.IsNullOrWhiteSpace(value)) value = EarthquakeSourceIds.Huania;
+            _apiType = null;
+            SetField(ref _sourceId, value);
+        }
+    }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public int? ApiType
+    {
+        get => _sourceId is null ? _apiType : null;
+        set
+        {
+            if (_sourceId is not null) return;
+            if (SetField(ref _apiType, value)) OnPropertyChanged(nameof(SourceId));
+        }
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;

@@ -22,15 +22,15 @@ public class HttpRequester : IHttpRequester
                 data.Select(t => UrlEncoder.Default.Encode(t.Key) + "=" + UrlEncoder.Default.Encode(t.Value)));
         }
 
-        var responseMessage = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
+        using var responseMessage = await _httpClient.GetAsync(url, cancellationToken).ConfigureAwait(false);
         responseMessage.EnsureSuccessStatusCode();
         return await responseMessage.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
     }
 
 
-    public async Task<string> PostString(string url, HttpContent content, CancellationToken cancellationToken = default)
+    public async Task<string> PostString(string url, HttpContent? content = null, CancellationToken cancellationToken = default)
     {
-        var response = await _httpClient.PostAsync(url, content, cancellationToken).ConfigureAwait(false);
+        using var response = await _httpClient.PostAsync(url, content, cancellationToken).ConfigureAwait(false);
         response.EnsureSuccessStatusCode();
         return await response.Content.ReadAsStringAsync(cancellationToken).ConfigureAwait(false);
     }

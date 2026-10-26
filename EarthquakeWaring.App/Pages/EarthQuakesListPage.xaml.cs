@@ -8,10 +8,11 @@ using EarthquakeWaring.App.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading;
+using System.Threading.Channels;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using EarthquakeWaring.App.Infrastructure.Models.ApiModels;
 using Button = Wpf.Ui.Controls.Button;
 
 namespace EarthquakeWaring.App.Pages;
@@ -20,7 +21,8 @@ public partial class EarthQuakesListPage : Page
 {
     private readonly ISetting<CurrentPosition> _currentPosition;
     private readonly ISetting<AlertLimit> _alertLimit;
-    private readonly IEarthQuakeApiWrapper _quakeApi;
+    private readonly IEarthquakeSourceCatalog _sourceCatalog;
+    private readonly ISetting<UpdaterSetting> _updaterSetting;
     private readonly IEarthQuakeCalculator _calculator;
     private readonly IServiceProvider _service;
     private readonly EarthQuakesListPageViewModel _viewModel;
@@ -30,7 +32,8 @@ public partial class EarthQuakesListPage : Page
     {
         _service = DI.Services;
         _calculator = _service.GetRequiredService<IEarthQuakeCalculator>();
-        _quakeApi = _service.GetRequiredService<IEarthQuakeApiWrapper>();
+        _sourceCatalog = _service.GetRequiredService<IEarthquakeSourceCatalog>();
+        _updaterSetting = _service.GetRequiredService<ISetting<UpdaterSetting>>();
         _alertLimit = _service.GetRequiredService<ISetting<AlertLimit>>();
         _currentPosition = _service.GetRequiredService<ISetting<CurrentPosition>>();
 
@@ -44,25 +47,29 @@ public partial class EarthQuakesListPage : Page
         _viewModel.ProgressRingVisibility = Visibility.Visible;
         var cancellationTokenSource = new CancellationTokenSource();
         var cancellationToken = cancellationTokenSource.Token;
-        var results = await _quakeApi.GetEarthQuakeList(1, cancellationToken);
-        results.ForEach(t => _viewModel.InformationList.Add(ConvertToInformation(t)));
+        var querySource = _sourceCatalog.GetQuerySource(
+            _updaterSetting.Setting?.SourceId ?? EarthquakeSourceIds.Huania);
+        var results = await querySource.GetRecentAsync(cancellationToken);
+        foreach (var result in results)
+            _viewModel.InformationList.Add(ConvertToInformation(result));
         ListView.ItemsSource = _viewModel.InformationList;
         _viewModel.ProgressRingVisibility = Visibility.Collapsed;
         LoadingRing.Visibility = Visibility.Collapsed;
     }
 
-    private EarthQuakeTrackingInformation ConvertToInformation(EarthQuakeInfoBase latestInfo)
+    private EarthQuakeTrackingInformation ConvertToInformation(EarthquakeReport latestInfo)
     {
         var trackingInformation = new EarthQuakeTrackingInformation
         {
             // Update the tracking information
-            Position = latestInfo.PlaceName ?? "未知地点",
-            StartTime = latestInfo.StartAt,
-            UpdateTime = latestInfo.UpdateAt,
-            Depth = latestInfo.Depth,
+            Provider = latestInfo.EventKey.Provider,
+            Position = latestInfo.Hypocenter ?? "未知地点",
+            StartTime = latestInfo.OriginTime.LocalDateTime,
+            UpdateTime = latestInfo.ReportTime.LocalDateTime,
+            Depth = latestInfo.Depth ?? 0,
             Latitude = latestInfo.Latitude,
             Longitude = latestInfo.Longitude,
-            Id = latestInfo.Id,
+            Id = latestInfo.EventKey.EventId,
             Magnitude = latestInfo.Magnitude
         };
 
@@ -87,12 +94,22 @@ public partial class EarthQuakesListPage : Page
         var info = (((sender as Button)?.Tag as EarthQuakeTrackingInformation)!);
         var tracker = _service.GetService<IEarthQuakeTracker>();
         var timeHandler = _service.GetService<ITimeHandler>();
-        tracker!.SimulateTimeSpan = DateTime.Now + timeHandler!.Offset - info.StartTime;
-        tracker!.SimulateUpdates = await _quakeApi.GetEarthQuakeInfo(info.Id, cancellationTokenSource.Token);
-        tracker?.StartTrack(new EarthQuakeInfoBase()
+        var querySource = _sourceCatalog.GetQuerySource(
+            _updaterSetting.Setting?.SourceId ?? EarthquakeSourceIds.Huania);
+        var reports = await querySource.GetEventReportsAsync(
+            new EarthquakeEventKey(info.Provider, info.Id), cancellationTokenSource.Token);
+        if (tracker is null || reports.Count == 0)
         {
-            Id = info.Id
-        }, cancellationTokenSource);
+            cancellationTokenSource.Dispose();
+            return;
+        }
+
+        tracker.SimulateTimeSpan = DateTime.Now + timeHandler!.Offset - info.StartTime;
+        tracker.SimulateReports = reports;
+        var channel = Channel.CreateUnbounded<EarthquakeReport>();
+        channel.Writer.TryComplete();
+        _ = tracker.TrackAsync(reports[0], channel.Reader, cancellationTokenSource.Token)
+            .ContinueWith(_ => cancellationTokenSource.Dispose(), TaskScheduler.Default);
     }
 
     private void ShowEarthQuakeDetail(object sender, MouseButtonEventArgs e)

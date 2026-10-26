@@ -21,6 +21,8 @@ public class EarthQuakeTrackingInformation : INotifyPropertyChanged
     private int _theoryCountDown;
     private EarthQuakeStage _stage;
 
+    public string Provider { get; set; } = string.Empty;
+
     public bool DontUseShouldAlert { get; set; }
 
     public EarthQuakeStage Stage
